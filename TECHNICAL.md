@@ -74,3 +74,11 @@ All SLA calculations run 24/7 wall-clock time without business-hour pausing:
 * `GET /api/v1/cases/{case_id}` — Get case detail with SLA status.
 * `PATCH /api/v1/cases/{case_id}` — Update case metadata with version check.
 * `POST /api/v1/cases/{case_id}/transition` — Execute validated lifecycle state transition (with 7-day reopen enforcement).
+
+### Messages & Attachments (`/api/v1/cases/{case_id}`)
+* `POST /api/v1/cases/{case_id}/messages` — Add public message or internal staff note (enforces visibility partition).
+* `GET /api/v1/cases/{case_id}/messages` — List messages (internal notes strictly hidden from Requesters).
+* `POST /api/v1/cases/{case_id}/attachments` — Upload file attachment with magic-byte validation and 10MB/50MB limits.
+* `GET /api/v1/cases/{case_id}/attachments` — List case attachments with storage quota metrics.
+* `GET /api/v1/cases/{case_id}/attachments/{attachment_id}/download` — Get secure signed download URL.
+* `DELETE /api/v1/cases/{case_id}/attachments/{attachment_id}` — Remove attachment.

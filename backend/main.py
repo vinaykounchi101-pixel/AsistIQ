@@ -5,6 +5,7 @@ from backend.core.config import settings
 from backend.api.health import router as health_router
 from backend.api.auth.routes import router as auth_router
 from backend.api.cases.routes import router as cases_router
+from backend.api.messages.routes import router as messages_router
 
 
 @asynccontextmanager
@@ -44,3 +45,4 @@ def root():
 app.include_router(health_router, prefix=settings.API_V1_PREFIX)
 app.include_router(auth_router, prefix=settings.API_V1_PREFIX)
 app.include_router(cases_router, prefix=settings.API_V1_PREFIX)
+app.include_router(messages_router, prefix=settings.API_V1_PREFIX)
