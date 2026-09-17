@@ -120,5 +120,28 @@ All SLA calculations run 24/7 wall-clock time without business-hour pausing:
 * **`AuthNotifier` (Riverpod `StateNotifier`):** Handles `checkAuth()`, `login()`, `loginWithGoogle()`, and `logout()`.
 * **`GoRouter` Navigation:** Auth state-driven route guards with role permissions (`/login`, `/cases`, `/reports`, `/admin`) and responsive multi-platform shell.
 
+---
+
+## 5. Flutter Incident Workspace & AI Copilot Architecture (Sprint 9)
+
+### Incident Workspace & SLA Countdown Clock
+* **Live SLA Clock (`SlaCountdownTimer`):** Real-time 1-second ticker computing elapsed wall-clock deadlines for Response SLA and Resolution SLA. Color-coded warning and breach transitions. First staff public response immediately stops the Response clock.
+* **Threaded Communication Feed:** Partitioned into Public Messages (visible to requesters) and Internal Staff Notes (strictly restricted to staff roles).
+* **Optimistic Concurrency Conflict Banner:** Detects `409 Conflict` (`STALE_VERSION`) from backend mutations and displays a prompt to reload without losing user context.
+* **7-Day Reopen Enforcement:** Closed cases within the 7-day window present a Reopen button triggering `POST /api/v1/cases/{id}/transition` with reason logging.
+
+### AI Finny Copilot Panel (`AiCopilotPanel`)
+* **Intake Triage Card:** Displays AI predicted category, SLA priority tier, confidence score %, reasoning, and missing info checklist.
+* **Continuous Summary Card:** On-demand chronological synthesis of complex case threads.
+* **HITL Communication Drafts:** Generates contextual drafts (`info_request`, `progress_update`, `resolution`, `escalation_summary`), enables operator text editing, and offers 1-click "Approve & Send" to timeline.
+
+### 5 Role Dashboards (`RoleDashboardRouter`)
+* **`RequesterDashboard`:** Self-service tracking, open ticket count, quick incident creation.
+* **`OperatorDashboard`:** Active ticket workbench, SLA urgency filters, risk signal badges.
+* **`LeadDashboard`:** Unassigned triage pool and critical risk escalations.
+* **`ManagerDashboard`:** Real-time KPI summaries, SLA breach alerts, and 1-click manual sweep trigger (`/admin/sweeps/run`).
+* **`AdminDashboard`:** Security posture, RBAC overview, active cases counter.
+
+
 
 

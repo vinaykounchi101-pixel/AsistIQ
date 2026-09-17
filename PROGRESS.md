@@ -17,20 +17,19 @@
 | **Sprint 5** | `feat/backend-ai-engine` | Gemini AIProvider interface, versioned prompt templates (`backend/ai/prompts/`), AI case triage/analysis, continuous summary, missing-info detection, AI communication drafts with human-in-the-loop review. | ✅ **Completed & Merged into `dev`** |
 | **Sprint 6** | `feat/backend-sweeps-scheduler` | In-process APScheduler periodic sweep (every 5 mins), SLA warning & breach detection, risk scoring (Low/Mod/High/Critical), auto-escalation triggers to Team Lead / Manager. | ✅ **Completed & Merged into `dev`** |
 | **Sprint 7** | `feat/backend-insights-reports` | Manager / Admin Operational Insights aggregate SQL queries + Gemini plain-language narrative. | ✅ **Completed & Merged into `dev`** |
-| **Sprint 8** | `feat/flutter-shell-shared` | Flutter multi-platform scaffold (Mobile, Desktop, Web), Stitch Obsidian Design System tokens (`colors`, `typography`, `spacing`, `theme`), `ApiClient` (Dio, JWT interceptor, refresh rotation, typed exceptions), Riverpod `AuthNotifier` & session state, responsive multi-platform `AppShell`, `GoRouter` auth guards. | ✅ **Completed** |
-| **Sprint 9** | `feat/flutter-ui-dashboards` | Intake forms, Case workspace (Timeline, AI suggestions panel, draft review), 5 Role Dashboards (Requester, Operator, Lead, Manager, Admin). | ⏳ **Ready to Launch (Next Sprint)** |
-| **Sprint 10** | `feat/seed-e2e-uat` | `scripts/seed_demo_data.py`, automated test suites, multi-user UAT signoff. | ⏳ **Pending** |
+| **Sprint 8** | `feat/flutter-shell-shared` | Flutter multi-platform scaffold (Mobile, Desktop, Web), Stitch Obsidian Design System tokens (`colors`, `typography`, `spacing`, `theme`), `ApiClient` (Dio, JWT interceptor, refresh rotation, typed exceptions), Riverpod `AuthNotifier` & session state, responsive multi-platform `AppShell`, `GoRouter` auth guards. | ✅ **Completed & Merged into `dev`** |
+| **Sprint 9** | `feat/flutter-ui-dashboards` | Intake creation form, Incident workspace (`CaseDetailScreen`), 24/7 live SLA countdown clock widget, activity timeline & role-gated internal notes, AI Finny Copilot sidebar panel (triage, continuous summary, HITL draft review & 1-click send), and 5 Role Dashboards (`Requester`, `Operator`, `TeamLead`, `Manager`, `Admin`). | ✅ **Completed** |
+| **Sprint 10** | `feat/seed-e2e-uat` | `scripts/seed_demo_data.py`, automated end-to-end test suite, multi-user role UAT verification. | ⏳ **Ready to Launch (Next Sprint)** |
 
 ---
 
 ## 🎯 Next Steps
-1. Merge `feat/flutter-shell-shared` into `dev` after local verification.
-2. Checkout feature branch: `git checkout -b feat/flutter-ui-dashboards`.
-3. Launch **Sprint 9 (`feat/flutter-ui-dashboards`)**:
-   * Intake forms with dynamic category/priority selectors and attachment upload.
-   * Incident workspace with real-time SLA countdown clock, activity timeline, and role-gated internal notes.
-   * AI Finny Copilot sidebar panel (triage analysis, auto-extracted entities, continuous summary, communication draft HITL review).
-   * 5 Role Dashboards (Requester portal, Operator workbench, Team Lead queue, Manager SLA monitor, Admin console).
+1. Merge `feat/flutter-ui-dashboards` into `dev` after local verification.
+2. Checkout feature branch: `git checkout -b feat/seed-e2e-uat`.
+3. Launch **Sprint 10 (`feat/seed-e2e-uat`)**:
+   * Create realistic seed database script (`scripts/seed_demo_data.py`) with 5 user roles, teams, SLA policies, cases across all lifecycle states, attachments, and audit logs.
+   * Run end-to-end integration and smoke verification across backend APIs and client flows.
+
 
 
 
