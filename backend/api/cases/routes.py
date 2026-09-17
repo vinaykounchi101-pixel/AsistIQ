@@ -99,3 +99,43 @@ def transition_case_status(
     """
     case = CaseService.transition_status(db, current_user, case_id, data)
     return CaseResponseSchema.model_validate(case)
+
+
+@router.get("/{case_id}/risk", status_code=status.HTTP_200_OK)
+def get_case_risk(
+    case_id: uuid.UUID,
+    current_user: User = Depends(get_current_verified_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Retrieve or compute real-time risk assessment for a case (SRS v3.3 §4.3).
+    """
+    case = CaseService.get_case(db, current_user, case_id)
+    from backend.repositories.sweep_repository import SweepRepository
+    from backend.services.risk_service import RiskScoringService
+    from backend.schemas.sweep import RiskAssessmentResponse
+
+    assessment = SweepRepository.get_risk_assessment(db, case_id)
+    if not assessment:
+        assessment = RiskScoringService.compute_and_persist(db, case)
+
+    return RiskAssessmentResponse.model_validate(assessment)
+
+
+@router.get("/{case_id}/escalations", status_code=status.HTTP_200_OK)
+def list_case_escalations(
+    case_id: uuid.UUID,
+    current_user: User = Depends(get_current_verified_user),
+    db: Session = Depends(get_db)
+):
+    """
+    List all auto-escalation and manual escalation events for a case (SRS v3.3 §4.4).
+    """
+    # Authorization check
+    CaseService.get_case(db, current_user, case_id)
+    from backend.repositories.sweep_repository import SweepRepository
+    from backend.schemas.sweep import EscalationEventResponse
+
+    events = SweepRepository.get_escalations_by_case(db, case_id)
+    return [EscalationEventResponse.model_validate(e) for e in events]
+

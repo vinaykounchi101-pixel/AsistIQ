@@ -32,6 +32,11 @@ from backend.schemas.ai import (
     DraftResponse,
     DraftSendRequest,
 )
+from backend.schemas.sweep import (
+    RiskAssessmentResponse,
+    EscalationEventResponse,
+    SweepSummaryResponse,
+)
 
 __all__ = [
     "UserCreateSchema",
@@ -60,5 +65,9 @@ __all__ = [
     "DraftCreateRequest",
     "DraftResponse",
     "DraftSendRequest",
+    "RiskAssessmentResponse",
+    "EscalationEventResponse",
+    "SweepSummaryResponse",
 ]
+
 

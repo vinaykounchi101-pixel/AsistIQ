@@ -82,3 +82,11 @@ All SLA calculations run 24/7 wall-clock time without business-hour pausing:
 * `GET /api/v1/cases/{case_id}/attachments` — List case attachments with storage quota metrics.
 * `GET /api/v1/cases/{case_id}/attachments/{attachment_id}/download` — Get secure signed download URL.
 * `DELETE /api/v1/cases/{case_id}/attachments/{attachment_id}` — Remove attachment.
+
+### AI Engine (`/api/v1/cases/{case_id}/ai`)
+* `POST /api/v1/cases/{case_id}/ai/triage` — Trigger or refresh intake triage (category, priority, confidence, missing info).
+* `POST /api/v1/cases/{case_id}/ai/summarize` — Generate continuous chronological summary of case thread.
+* `POST /api/v1/cases/{case_id}/ai/drafts` — Generate contextual communication draft (`info_request`, `progress_update`, `resolution`, `escalation_summary`).
+* `GET /api/v1/cases/{case_id}/ai/drafts` — List all drafts generated for a case.
+* `POST /api/v1/cases/{case_id}/ai/drafts/{draft_id}/send` — Human-in-the-loop review: approve, edit, and post draft as case message (`ai_generated=True`).
+

@@ -7,14 +7,20 @@ from backend.api.auth.routes import router as auth_router
 from backend.api.cases.routes import router as cases_router
 from backend.api.messages.routes import router as messages_router
 from backend.api.ai.routes import router as ai_router
+from backend.api.admin.routes import router as admin_router
+from backend.scheduler.scheduler import start_scheduler, shutdown_scheduler
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup: Validate required environment variables
     settings.validate_startup_secrets()
+    # In production and staging, start the background scheduler automatically
+    if settings.ENVIRONMENT in ["staging", "production"]:
+        start_scheduler(interval_minutes=5)
     yield
-    # Shutdown logic (if any)
+    # Shutdown logic
+    shutdown_scheduler()
 
 
 app = FastAPI(
@@ -48,4 +54,6 @@ app.include_router(auth_router, prefix=settings.API_V1_PREFIX)
 app.include_router(cases_router, prefix=settings.API_V1_PREFIX)
 app.include_router(messages_router, prefix=settings.API_V1_PREFIX)
 app.include_router(ai_router, prefix=settings.API_V1_PREFIX)
+app.include_router(admin_router, prefix=settings.API_V1_PREFIX)
+
 
