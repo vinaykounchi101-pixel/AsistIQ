@@ -25,6 +25,13 @@ from backend.schemas.message import (
     AttachmentResponse,
     AttachmentListResponse,
 )
+from backend.schemas.ai import (
+    AITriageResponse,
+    CaseSummaryResponse,
+    DraftCreateRequest,
+    DraftResponse,
+    DraftSendRequest,
+)
 
 __all__ = [
     "UserCreateSchema",
@@ -48,4 +55,10 @@ __all__ = [
     "MessageListResponse",
     "AttachmentResponse",
     "AttachmentListResponse",
+    "AITriageResponse",
+    "CaseSummaryResponse",
+    "DraftCreateRequest",
+    "DraftResponse",
+    "DraftSendRequest",
 ]
+
