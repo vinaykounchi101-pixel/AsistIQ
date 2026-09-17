@@ -133,6 +133,10 @@ All SLA calculations run 24/7 wall-clock time without business-hour pausing:
 
 ---
 
-## 5. Test Suite Verification
+## 5. Test Suite Verification & Security Posture
 * **Backend:** 37 / 37 pytest test suites passing (`pytest backend/tests/ -v`)
 * **Frontend:** 20 / 20 Flutter test suites passing (`flutter test`)
+* **RBAC & Navigation Enforcement:**
+  * Desktop sidebar & Mobile navigation strictly filter visible sections based on `UserRole` (`isStaff`, `isManagement`, `isAdmin`).
+  * `ReportsScreen` (`/reports`) and backend endpoints `/api/v1/reports/*` strictly restricted to `Manager` and `Administrator`.
+  * AI Copilot sidebar panel on `CaseDetailScreen` strictly restricted to staff roles to prevent Requester 403 API collisions.
