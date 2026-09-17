@@ -142,6 +142,26 @@ All SLA calculations run 24/7 wall-clock time without business-hour pausing:
 * **`ManagerDashboard`:** Real-time KPI summaries, SLA breach alerts, and 1-click manual sweep trigger (`/admin/sweeps/run`).
 * **`AdminDashboard`:** Security posture, RBAC overview, active cases counter.
 
+---
+
+## 6. Seed Data & End-to-End Test Suite (Sprint 10)
+
+### Idempotent Demo Database Seeder (`backend/scripts/seed_demo_data.py`)
+* **5 User Roles Seeded:** `requester@paradox.com`, `operator@paradox.com`, `lead@paradox.com`, `manager@paradox.com`, `admin@paradox.com` (password: `Password123!` hashed via Argon2id).
+* **Teams & Services:** 4 IT Support teams and 4 Service categories.
+* **Incident Lifecycle Test Cases:**
+  * `INC-2026-000001` (P1 Critical, New, live SLA Response countdown)
+  * `INC-2026-000002` (P2 High, In Assessment, with AI Triage & Draft)
+  * `INC-2026-000003` (P3 Medium, Assigned, threaded messages & staff internal notes)
+  * `INC-2026-000004` (P4 Low, Resolved, SLA compliant)
+  * `INC-2026-000005` (P3 Medium, Closed 2 days ago -> Reopenable within 7-day window)
+  * `INC-2026-000006` (P4 Low, Closed 18 days ago -> Non-reopenable past window)
+
+### Automated Test Suite
+* **37 Automated Tests:** 100% pass rate across all 10 Sprints.
+* **End-to-End Integration Suite (`test_e2e_flow.py`):** Exercises the complete multi-role lifecycle (Auth -> Case Submission -> SLA Clock -> AI Triage -> HITL Draft Review & Send -> Resolution -> 7-day Reopen -> Background Sweep -> Executive Reporting).
+
+
 
 
 
