@@ -1,14 +1,27 @@
+import os
 from typing import List, Literal, Optional
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+_BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_ROOT_DIR = os.path.dirname(_BACKEND_DIR)
+
+_ENV_FILES = (
+    os.path.join(_BACKEND_DIR, ".env"),
+    os.path.join(_ROOT_DIR, ".env"),
+    ".env",
+    "backend/.env",
+)
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=_ENV_FILES,
         env_file_encoding="utf-8",
         extra="ignore"
     )
+
+
 
     # Core Environment
     ENVIRONMENT: Literal["local", "staging", "production"] = "local"
