@@ -37,6 +37,13 @@ from backend.schemas.sweep import (
     EscalationEventResponse,
     SweepSummaryResponse,
 )
+from backend.schemas.report import (
+    KPIOverview,
+    SLAComplianceReport,
+    TeamPerformanceReport,
+    IncidentTrendReport,
+    ExecutiveSummaryResponse,
+)
 
 __all__ = [
     "UserCreateSchema",
@@ -68,6 +75,12 @@ __all__ = [
     "RiskAssessmentResponse",
     "EscalationEventResponse",
     "SweepSummaryResponse",
+    "KPIOverview",
+    "SLAComplianceReport",
+    "TeamPerformanceReport",
+    "IncidentTrendReport",
+    "ExecutiveSummaryResponse",
 ]
+
 
 
