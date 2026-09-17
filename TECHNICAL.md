@@ -74,6 +74,8 @@ All SLA calculations run 24/7 wall-clock time without business-hour pausing:
 * `GET /api/v1/cases/{case_id}` — Get case detail with SLA status.
 * `PATCH /api/v1/cases/{case_id}` — Update case metadata with version check.
 * `POST /api/v1/cases/{case_id}/transition` — Execute validated lifecycle state transition (with 7-day reopen enforcement).
+* `GET /api/v1/cases/{case_id}/risk` — Retrieve or recompute real-time deterministic risk assessment and signal breakdown.
+* `GET /api/v1/cases/{case_id}/escalations` — List all auto-escalation and manual escalation events.
 
 ### Messages & Attachments (`/api/v1/cases/{case_id}`)
 * `POST /api/v1/cases/{case_id}/messages` — Add public message or internal staff note (enforces visibility partition).
@@ -89,4 +91,34 @@ All SLA calculations run 24/7 wall-clock time without business-hour pausing:
 * `POST /api/v1/cases/{case_id}/ai/drafts` — Generate contextual communication draft (`info_request`, `progress_update`, `resolution`, `escalation_summary`).
 * `GET /api/v1/cases/{case_id}/ai/drafts` — List all drafts generated for a case.
 * `POST /api/v1/cases/{case_id}/ai/drafts/{draft_id}/send` — Human-in-the-loop review: approve, edit, and post draft as case message (`ai_generated=True`).
+
+### Sweeps & Administration (`/api/v1/admin`)
+* `POST /api/v1/admin/sweeps/run` — On-demand manual SLA audit and risk sweep execution (Managers & Admins).
+
+### Operational Reports & Analytics (`/api/v1/reports`)
+* `GET /api/v1/reports/summary` — Full executive summary with KPI metrics (volumes, compliance %, MTTR) + Gemini AI briefing.
+* `GET /api/v1/reports/sla-compliance` — Granular SLA compliance breakdown by priority tier (P1–P4).
+* `GET /api/v1/reports/team-performance` — Per-team and per-operator workload and velocity metrics.
+* `GET /api/v1/reports/trends` — Time-series incident volume, resolution, and breach trends.
+
+---
+
+## 4. Flutter Multi-Platform Client Architecture (Sprint 8)
+
+### Design System (Stitch Obsidian Theme)
+* **Dark Mode Theme (Primary):** Background `#0B0F19`, Surface `#111827`, Card `#1F2937`, Border `#374151`.
+* **Light Mode Theme:** Background `#F8FAFC`, Surface `#FFFFFF`, Border `#E2E8F0`.
+* **Primary Brand Accents:** Electric Iris (`#6366F1`), Cyan Glow (`#06B6D4`), Purple Accent (`#8B5CF6`).
+* **SLA Priority Colors:** P1 Critical (`#EF4444`), P2 High (`#F59E0B`), P3 Medium (`#3B82F6`), P4 Low (`#10B981`).
+* **Typography:** Google Fonts Inter across all display, headline, title, body, and label text themes.
+* **Layout Grid & Breakpoints:** 4px spacing scale (`xs`: 4, `sm`: 8, `md`: 12, `base`: 16, `lg`: 20, `xl`: 24, `xxl`: 32, `xxxl`: 48). Responsive breakpoints at Mobile (`<600px`), Tablet (`600-1024px`), Desktop (`>1024px`).
+
+### API Networking & Auth State Management
+* **`ApiClient`:** Powered by `dio` with configurable `API_BASE_URL` (default `http://localhost:8000`).
+* **`AuthInterceptor`:** Automatic Bearer token header injection and queued `401 Unauthorized` token refresh rotation via `FlutterSecureStorage`.
+* **Typed Error Envelope:** Maps backend HTTP status codes to `ApiException`, `UnauthorizedException`, `ForbiddenException`, `NotFoundException`, `ConflictException`, `ValidationException`, and `NetworkException`.
+* **`AuthNotifier` (Riverpod `StateNotifier`):** Handles `checkAuth()`, `login()`, `loginWithGoogle()`, and `logout()`.
+* **`GoRouter` Navigation:** Auth state-driven route guards with role permissions (`/login`, `/cases`, `/reports`, `/admin`) and responsive multi-platform shell.
+
+
 
