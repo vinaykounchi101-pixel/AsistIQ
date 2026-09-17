@@ -3,7 +3,8 @@
 **Specification Version:** SRS v3.3 / PRD Revised  
 **Architecture:** Layered Clean Architecture (FastAPI) + Feature-Driven Multi-Platform Client (Flutter)  
 **Backend Port:** 8000  
-**API Base Prefix:** `/api/v1`
+**API Base Prefix:** `/api/v1`  
+**UI Framework & Design System:** Flutter Web/Desktop/Mobile + Stitch Nordic Calm Light Pastel Tokens
 
 ---
 
@@ -23,7 +24,7 @@ PostgreSQL Database (Supabase / Local)    <-- Relational persistence, Alembic mi
 ```
 
 ### Swappable Providers (`backend/providers/`)
-* **AI Provider (`providers/ai/`):** Gemini API client with graceful fallback handling.
+* **AI Provider (`providers/ai/`):** Gemini API client with graceful fallback handling and configurable `GEMINI_MODEL`.
 * **Storage Provider (`providers/storage/`):** Supabase Storage for attachments.
 * **Auth Provider (`providers/auth/`):** Argon2id/bcrypt password hasher, JWT access/refresh token generator, Google OAuth 2.0 / OIDC code & ID token exchange.
 * **Notification Provider (`providers/notifications/`):** `GmailSmtpNotificationProvider` for local dev; `BrevoNotificationProvider` (HTTP API) for staging/production to bypass Render SMTP port blocking.
@@ -54,10 +55,15 @@ All SLA calculations run 24/7 wall-clock time without business-hour pausing:
 
 ---
 
-## 3. Implemented API Endpoints (as of Session 1)
+## 3. Implemented API Endpoints
 
-### Health
+### Health & Direct UI Endpoints
 * `GET /api/v1/health` — DB connectivity health check.
+* `GET /ui` — Stitch UI landing index.
+* `GET /ui/requester` — Direct Stitch Requester Portal & Incident Drawer view.
+* `GET /ui/operator` — Direct Stitch Operator Workbench view.
+* `GET /ui/command-center` — Direct Stitch Incident Command Center view.
+* `GET /ui/manager` — Direct Stitch Manager Operational Insights view.
 
 ### Authentication (`/api/v1/auth`)
 * `POST /api/v1/auth/signup` — Password registration with optional email verification.
@@ -98,70 +104,35 @@ All SLA calculations run 24/7 wall-clock time without business-hour pausing:
 ### Operational Reports & Analytics (`/api/v1/reports`)
 * `GET /api/v1/reports/summary` — Full executive summary with KPI metrics (volumes, compliance %, MTTR) + Gemini AI briefing.
 * `GET /api/v1/reports/sla-compliance` — Granular SLA compliance breakdown by priority tier (P1–P4).
-* `GET /api/v1/reports/team-performance` — Per-team and per-operator workload and velocity metrics.
-* `GET /api/v1/reports/trends` — Time-series incident volume, resolution, and breach trends.
+* `GET /api/v1/reports/team-performance` — Team & operator workload throughput and breach metrics.
+* `GET /api/v1/reports/trends` — 14-day chronological daily ingestion & resolution trend series.
 
 ---
 
-## 4. Flutter Multi-Platform Client Architecture (Sprint 8)
+## 4. Flutter Client Implementation & Design System
 
-### Design System (Stitch Obsidian Theme)
-* **Dark Mode Theme (Primary):** Background `#0B0F19`, Surface `#111827`, Card `#1F2937`, Border `#374151`.
-* **Light Mode Theme:** Background `#F8FAFC`, Surface `#FFFFFF`, Border `#E2E8F0`.
-* **Primary Brand Accents:** Electric Iris (`#6366F1`), Cyan Glow (`#06B6D4`), Purple Accent (`#8B5CF6`).
-* **SLA Priority Colors:** P1 Critical (`#EF4444`), P2 High (`#F59E0B`), P3 Medium (`#3B82F6`), P4 Low (`#10B981`).
-* **Typography:** Google Fonts Inter across all display, headline, title, body, and label text themes.
-* **Layout Grid & Breakpoints:** 4px spacing scale (`xs`: 4, `sm`: 8, `md`: 12, `base`: 16, `lg`: 20, `xl`: 24, `xxl`: 32, `xxxl`: 48). Responsive breakpoints at Mobile (`<600px`), Tablet (`600-1024px`), Desktop (`>1024px`).
+### Design Tokens (`client/lib/shared/theme/`)
+* **Color Palette (`colors.dart`):** Stitch Nordic Light Pastel palette (`#F8FAFC` canvas, `#FFFFFF` cards, `#E2E8F0` borders, `#4F46E5` indigo primary, `#F5F3FF` lavender accents, `#ECFDF5` sage badge, `#FEF2F2` blush warning).
+* **Typography (`typography.dart`):** `Plus Jakarta Sans` for titles and UI labels; `JetBrains Mono` for IDs, timestamps, SLA clocks, and tags.
+* **Layout Shell (`shell.dart`):** 260px desktop navigation sidebar with categorized sections (`OPERATIONS`, `INSIGHTS & ASSETS`, `GOVERNANCE`), real-time `Ctrl+K` search bar, APScheduler heartbeat badge, unread alert counter (`3`), and user profile status dot.
 
-### API Networking & Auth State Management
-* **`ApiClient`:** Powered by `dio` with configurable `API_BASE_URL` (default `http://localhost:8000`).
-* **`AuthInterceptor`:** Automatic Bearer token header injection and queued `401 Unauthorized` token refresh rotation via `FlutterSecureStorage`.
-* **Typed Error Envelope:** Maps backend HTTP status codes to `ApiException`, `UnauthorizedException`, `ForbiddenException`, `NotFoundException`, `ConflictException`, `ValidationException`, and `NetworkException`.
-* **`AuthNotifier` (Riverpod `StateNotifier`):** Handles `checkAuth()`, `login()`, `loginWithGoogle()`, and `logout()`.
-* **`GoRouter` Navigation:** Auth state-driven route guards with role permissions (`/login`, `/cases`, `/reports`, `/admin`) and responsive multi-platform shell.
-
----
-
-## 5. Flutter Incident Workspace & AI Copilot Architecture (Sprint 9)
-
-### Incident Workspace & SLA Countdown Clock
-* **Live SLA Clock (`SlaCountdownTimer`):** Real-time 1-second ticker computing elapsed wall-clock deadlines for Response SLA and Resolution SLA. Color-coded warning and breach transitions. First staff public response immediately stops the Response clock.
-* **Threaded Communication Feed:** Partitioned into Public Messages (visible to requesters) and Internal Staff Notes (strictly restricted to staff roles).
-* **Optimistic Concurrency Conflict Banner:** Detects `409 Conflict` (`STALE_VERSION`) from backend mutations and displays a prompt to reload without losing user context.
-* **7-Day Reopen Enforcement:** Closed cases within the 7-day window present a Reopen button triggering `POST /api/v1/cases/{id}/transition` with reason logging.
-
-### AI Finny Copilot Panel (`AiCopilotPanel`)
-* **Intake Triage Card:** Displays AI predicted category, SLA priority tier, confidence score %, reasoning, and missing info checklist.
-* **Continuous Summary Card:** On-demand chronological synthesis of complex case threads.
-* **HITL Communication Drafts:** Generates contextual drafts (`info_request`, `progress_update`, `resolution`, `escalation_summary`), enables operator text editing, and offers 1-click "Approve & Send" to timeline.
-
-### 5 Role Dashboards (`RoleDashboardRouter`)
-* **`RequesterDashboard`:** Self-service tracking, open ticket count, quick incident creation.
-* **`OperatorDashboard`:** Active ticket workbench, SLA urgency filters, risk signal badges.
-* **`LeadDashboard`:** Unassigned triage pool and critical risk escalations.
-* **`ManagerDashboard`:** Real-time KPI summaries, SLA breach alerts, and 1-click manual sweep trigger (`/admin/sweeps/run`).
-* **`AdminDashboard`:** Security posture, RBAC overview, active cases counter.
+### Implemented Screen Directory
+1. `LoginScreen` — [login_screen.dart](file:///e:/Projects/AsistIQ/client/lib/features/auth/screens/login_screen.dart)
+2. `AppShell` — [shell.dart](file:///e:/Projects/AsistIQ/client/lib/app/shell.dart)
+3. `RequesterDashboard` — [requester_dashboard.dart](file:///e:/Projects/AsistIQ/client/lib/features/dashboard/screens/requester_dashboard.dart)
+4. `OperatorDashboard` — [operator_dashboard.dart](file:///e:/Projects/AsistIQ/client/lib/features/dashboard/screens/operator_dashboard.dart)
+5. `LeadDashboard` (Command Center) — [lead_dashboard.dart](file:///e:/Projects/AsistIQ/client/lib/features/dashboard/screens/lead_dashboard.dart)
+6. `ManagerDashboard` (Operational Insights) — [manager_dashboard.dart](file:///e:/Projects/AsistIQ/client/lib/features/dashboard/screens/manager_dashboard.dart)
+7. `AdminScreen` & `AdminDashboard` (Governance) — [admin_screen.dart](file:///e:/Projects/AsistIQ/client/lib/features/admin/screens/admin_screen.dart)
+8. `CasesScreen` (Workspaces Directory) — [cases_screen.dart](file:///e:/Projects/AsistIQ/client/lib/features/cases/screens/cases_screen.dart)
+9. `CreateCaseScreen` (Intake Hub) — [create_case_screen.dart](file:///e:/Projects/AsistIQ/client/lib/features/cases/screens/create_case_screen.dart)
+10. `CaseDetailScreen` (Incident Workspace) — [case_detail_screen.dart](file:///e:/Projects/AsistIQ/client/lib/features/cases/screens/case_detail_screen.dart)
+11. `AiCopilotPanel` (Finny Copilot) — [ai_copilot_panel.dart](file:///e:/Projects/AsistIQ/client/lib/features/ai/widgets/ai_copilot_panel.dart)
+12. `ReportsScreen` (Executive Analytics) — [reports_screen.dart](file:///e:/Projects/AsistIQ/client/lib/features/reports/screens/reports_screen.dart)
+13. `NotificationDrawer` — [notification_drawer.dart](file:///e:/Projects/AsistIQ/client/lib/features/notifications/widgets/notification_drawer.dart)
 
 ---
 
-## 6. Seed Data & End-to-End Test Suite (Sprint 10)
-
-### Idempotent Demo Database Seeder (`backend/scripts/seed_demo_data.py`)
-* **5 User Roles Seeded:** `requester@paradox.com`, `operator@paradox.com`, `lead@paradox.com`, `manager@paradox.com`, `admin@paradox.com` (password: `Password123!` hashed via Argon2id).
-* **Teams & Services:** 4 IT Support teams and 4 Service categories.
-* **Incident Lifecycle Test Cases:**
-  * `INC-2026-000001` (P1 Critical, New, live SLA Response countdown)
-  * `INC-2026-000002` (P2 High, In Assessment, with AI Triage & Draft)
-  * `INC-2026-000003` (P3 Medium, Assigned, threaded messages & staff internal notes)
-  * `INC-2026-000004` (P4 Low, Resolved, SLA compliant)
-  * `INC-2026-000005` (P3 Medium, Closed 2 days ago -> Reopenable within 7-day window)
-  * `INC-2026-000006` (P4 Low, Closed 18 days ago -> Non-reopenable past window)
-
-### Automated Test Suite
-* **37 Automated Tests:** 100% pass rate across all 10 Sprints.
-* **End-to-End Integration Suite (`test_e2e_flow.py`):** Exercises the complete multi-role lifecycle (Auth -> Case Submission -> SLA Clock -> AI Triage -> HITL Draft Review & Send -> Resolution -> 7-day Reopen -> Background Sweep -> Executive Reporting).
-
-
-
-
-
+## 5. Test Suite Verification
+* **Backend:** 37 / 37 pytest test suites passing (`pytest backend/tests/ -v`)
+* **Frontend:** 20 / 20 Flutter test suites passing (`flutter test`)

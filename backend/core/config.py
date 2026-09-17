@@ -46,6 +46,7 @@ class Settings(BaseSettings):
 
     # Gemini AI
     GEMINI_API_KEY: str = Field(default="mock-gemini-key")
+    GEMINI_MODEL: str = Field(default="gemini-2.5-flash")
 
     # Supabase Storage
     SUPABASE_URL: str = Field(default="https://mock.supabase.co")
@@ -53,7 +54,7 @@ class Settings(BaseSettings):
     SUPABASE_STORAGE_BUCKET: str = "case-attachments"
 
     # CORS
-    ALLOWED_ORIGINS: str = "http://localhost:3000,http://localhost:8000,http://localhost:8080"
+    ALLOWED_ORIGINS: str = "http://localhost:3000,http://127.0.0.1:3000,http://localhost:8000,http://127.0.0.1:8000,http://localhost:8080,http://127.0.0.1:8080"
 
     # Email - Local Dev (Gmail SMTP)
     GMAIL_SMTP_ADDRESS: Optional[str] = None

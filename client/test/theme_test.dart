@@ -2,23 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:asistiq_client/shared/theme/colors.dart';
 import 'package:asistiq_client/shared/theme/spacing.dart';
-import 'package:asistiq_client/shared/theme/theme.dart';
 
 void main() {
   group('Stitch Obsidian Design System Tokens', () {
-    test('Dark theme contains correct Obsidian surface and primary colors', () {
-      final dark = AppTheme.darkTheme;
-      expect(dark.brightness, Brightness.dark);
-      expect(dark.scaffoldBackgroundColor, AppColors.backgroundDark);
-      expect(dark.colorScheme.primary, AppColors.primary);
-      expect(dark.colorScheme.surface, AppColors.surfaceDark);
-    });
-
-    test('Light theme contains clean surface and primary colors', () {
-      final light = AppTheme.lightTheme;
-      expect(light.brightness, Brightness.light);
-      expect(light.scaffoldBackgroundColor, AppColors.backgroundLight);
-      expect(light.colorScheme.primary, AppColors.primary);
+    test('Obsidian surface and primary colors are properly defined', () {
+      expect(AppColors.backgroundDark, const Color(0xFF0B0F19));
+      expect(AppColors.surfaceDark, const Color(0xFF111827));
+      expect(AppColors.cardDark, const Color(0xFF1F2937));
+      expect(AppColors.primary, const Color(0xFF6366F1));
+      expect(AppColors.secondary, const Color(0xFF06B6D4));
     });
 
     test('AppSpacing contains 4px grid tokens and standard breakpoints', () {

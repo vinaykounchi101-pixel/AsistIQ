@@ -1,7 +1,8 @@
 """
-AsistIQ / Paradox — Comprehensive Demo Database Seeder (Sprint 10)
+AsistIQ / Paradox — Comprehensive Demo Database Seeder (Sprint 10 / Final)
 Seeds realistic data covering all 5 User Roles, Teams, Services, SLAs,
-Cases across all lifecycle states, AI Triage & Drafts, and Audit Logs.
+12+ Cases across all lifecycle states, AI Triage & Drafts, Case Summaries,
+Risk Assessments, and Audit Logs.
 """
 
 import os
@@ -25,6 +26,8 @@ from backend.models.message import Message
 from backend.models.ai import AITriageResult, CaseSummary, CaseRiskAssessment, CommunicationDraft
 from backend.models.audit import AuditLog
 from backend.providers.auth.password_hasher import PasswordHasher
+
+
 def seed_database():
     print(">> Starting Paradox / AsistIQ Demo Database Seeding...")
     db = SessionLocal()
@@ -55,6 +58,7 @@ def seed_database():
             ("Hardware & Workstation", "Hardware", "Laptops, monitors, and peripherals"),
             ("Email & Collaboration", "Software", "Office365, Slack, and email access"),
             ("ERP & Database Systems", "Software", "SAP, PostgreSQL, and enterprise data tools"),
+            ("Identity & Access Management", "Access", "Okta SSO, Active Directory, and MFA"),
         ]
         services = {}
         for name, cat, desc in services_data:
@@ -70,7 +74,7 @@ def seed_database():
         users_data = [
             ("requester@paradox.com", "Alice Requester", UserRole.REQUESTER, None),
             ("operator@paradox.com", "Bob Operator", UserRole.OPERATOR, teams["Tier 1 Support"].id),
-            ("lead@paradox.com", "Carol TeamLead", UserRole.TEAM_LEAD, teams["Tier 1 Support"].id),
+            ("lead@paradox.com", "Carol TeamLead", UserRole.TEAM_LEAD, teams["Network Operations"].id),
             ("manager@paradox.com", "David Manager", UserRole.MANAGER, None),
             ("admin@paradox.com", "Eve SystemAdmin", UserRole.ADMINISTRATOR, None),
         ]
@@ -94,7 +98,7 @@ def seed_database():
                 print(f"  [+] Created User ({role.value}): {email}")
             users[email] = user
 
-        # 4. Seed Cases covering all Priorities & Lifecycle States
+        # 4. Seed Cases covering all Priorities & Lifecycle States across all users
         now = datetime.now(timezone.utc).replace(tzinfo=None)
         cases_data = [
             {
@@ -107,6 +111,7 @@ def seed_database():
                 "category": "Network",
                 "service": services["Corporate VPN Access"],
                 "owner": None,
+                "team": teams["Network Operations"],
                 "created_at": now - timedelta(minutes=10),
                 "resp_sla_mins": 15,
                 "res_sla_hrs": 4,
@@ -121,6 +126,7 @@ def seed_database():
                 "category": "Software",
                 "service": services["ERP & Database Systems"],
                 "owner": users["operator@paradox.com"],
+                "team": teams["Tier 1 Support"],
                 "created_at": now - timedelta(minutes=45),
                 "resp_sla_mins": 60,
                 "res_sla_hrs": 8,
@@ -135,6 +141,7 @@ def seed_database():
                 "category": "Hardware",
                 "service": services["Hardware & Workstation"],
                 "owner": users["operator@paradox.com"],
+                "team": teams["Tier 1 Support"],
                 "created_at": now - timedelta(hours=3),
                 "resp_sla_mins": 240,
                 "res_sla_hrs": 72,
@@ -149,6 +156,7 @@ def seed_database():
                 "category": "Software",
                 "service": services["Email & Collaboration"],
                 "owner": users["operator@paradox.com"],
+                "team": teams["Tier 1 Support"],
                 "created_at": now - timedelta(days=1),
                 "resolved_at": now - timedelta(hours=2),
                 "resp_sla_mins": 1440,
@@ -164,9 +172,10 @@ def seed_database():
                 "category": "Software",
                 "service": services["Email & Collaboration"],
                 "owner": users["operator@paradox.com"],
+                "team": teams["Enterprise Applications"],
                 "created_at": now - timedelta(days=4),
                 "resolved_at": now - timedelta(days=3),
-                "closed_at": now - timedelta(days=2),  # <= 7 days (Reopenable)
+                "closed_at": now - timedelta(days=2),
                 "resp_sla_mins": 240,
                 "res_sla_hrs": 72,
             },
@@ -180,17 +189,109 @@ def seed_database():
                 "category": "Hardware",
                 "service": services["Hardware & Workstation"],
                 "owner": users["operator@paradox.com"],
+                "team": teams["Tier 1 Support"],
                 "created_at": now - timedelta(days=25),
                 "resolved_at": now - timedelta(days=20),
-                "closed_at": now - timedelta(days=18),  # > 7 days (Non-reopenable)
+                "closed_at": now - timedelta(days=18),
                 "resp_sla_mins": 1440,
                 "res_sla_hrs": 120,
+            },
+            {
+                "ref": "INC-2026-000007",
+                "title": "Okta SSO Multi-Factor Authentication Reset",
+                "desc": "Replaced mobile device and cannot generate MFA tokens for Okta single sign-on.",
+                "priority": CasePriority.P2,
+                "status": CaseStatus.AWAITING_REQUESTER,
+                "risk": RiskLevel.HIGH,
+                "category": "Access",
+                "service": services["Identity & Access Management"],
+                "owner": users["lead@paradox.com"],
+                "team": teams["Security & Access"],
+                "created_at": now - timedelta(hours=6),
+                "resp_sla_mins": 60,
+                "res_sla_hrs": 8,
+            },
+            {
+                "ref": "INC-2026-000008",
+                "title": "PostgreSQL Production Replica Replication Lag",
+                "desc": "Standby read replica is 450MB behind primary. Read queries seeing stale transactional data.",
+                "priority": CasePriority.P1,
+                "status": CaseStatus.IN_ASSESSMENT,
+                "risk": RiskLevel.CRITICAL,
+                "category": "Software",
+                "service": services["ERP & Database Systems"],
+                "owner": users["lead@paradox.com"],
+                "team": teams["Enterprise Applications"],
+                "created_at": now - timedelta(hours=1, minutes=20),
+                "resp_sla_mins": 15,
+                "res_sla_hrs": 4,
+            },
+            {
+                "ref": "INC-2026-000009",
+                "title": "MacBook Pro M3 USB-C Charging Port Failure",
+                "desc": "Left-side USB-C Thunderbolt port not accepting power delivery from Apple 96W adapter.",
+                "priority": CasePriority.P3,
+                "status": CaseStatus.IN_ASSESSMENT,
+                "risk": RiskLevel.MODERATE,
+                "category": "Hardware",
+                "service": services["Hardware & Workstation"],
+                "owner": users["operator@paradox.com"],
+                "team": teams["Tier 1 Support"],
+                "created_at": now - timedelta(hours=5),
+                "resp_sla_mins": 240,
+                "res_sla_hrs": 72,
+            },
+            {
+                "ref": "INC-2026-000010",
+                "title": "Corporate Wi-Fi Certificate Expiry",
+                "desc": "Radius certificate expired on 802.1X enterprise network in London branch office.",
+                "priority": CasePriority.P2,
+                "status": CaseStatus.ASSIGNED,
+                "risk": RiskLevel.HIGH,
+                "category": "Network",
+                "service": services["Corporate VPN Access"],
+                "owner": users["lead@paradox.com"],
+                "team": teams["Network Operations"],
+                "created_at": now - timedelta(hours=2),
+                "resp_sla_mins": 60,
+                "res_sla_hrs": 8,
+            },
+            {
+                "ref": "INC-2026-000011",
+                "title": "AWS S3 Cloud Storage Bucket Permission Grant",
+                "desc": "Requesting read-only IAM policy attachment for finance data ingestion pipeline.",
+                "priority": CasePriority.P4,
+                "status": CaseStatus.RESOLVED,
+                "risk": RiskLevel.LOW,
+                "category": "Access",
+                "service": services["Identity & Access Management"],
+                "owner": users["lead@paradox.com"],
+                "team": teams["Security & Access"],
+                "created_at": now - timedelta(days=2),
+                "resolved_at": now - timedelta(hours=10),
+                "resp_sla_mins": 1440,
+                "res_sla_hrs": 120,
+            },
+            {
+                "ref": "INC-2026-000012",
+                "title": "CrowdStrike Falcon Sensor High CPU Utilization",
+                "desc": "Endpoint security agent consuming 98% CPU during scheduled disk indexing scans.",
+                "priority": CasePriority.P2,
+                "status": CaseStatus.IN_ASSESSMENT,
+                "risk": RiskLevel.HIGH,
+                "category": "Software",
+                "service": services["Identity & Access Management"],
+                "owner": users["operator@paradox.com"],
+                "team": teams["Tier 1 Support"],
+                "created_at": now - timedelta(hours=4),
+                "resp_sla_mins": 60,
+                "res_sla_hrs": 8,
             },
         ]
 
         for c_data in cases_data:
-            existing = db.query(Case).filter(Case.reference_number == c_data["ref"]).first()
-            if not existing:
+            c = db.query(Case).filter(Case.reference_number == c_data["ref"]).first()
+            if not c:
                 case_id = uuid.uuid4()
                 c = Case(
                     id=case_id,
@@ -202,7 +303,7 @@ def seed_database():
                     priority=c_data["priority"],
                     requester_id=users["requester@paradox.com"].id,
                     owner_id=c_data["owner"].id if c_data["owner"] else None,
-                    team_id=teams["Tier 1 Support"].id,
+                    team_id=c_data["team"].id if c_data.get("team") else teams["Tier 1 Support"].id,
                     service_id=c_data["service"].id if c_data["service"] else None,
                     version=1,
                     created_at=c_data["created_at"],
@@ -231,7 +332,7 @@ def seed_database():
                     id=uuid.uuid4(),
                     case_id=case_id,
                     risk_level=c_data["risk"],
-                    signals={"reasons": [f"Calculated {c_data['risk'].value} priority risk based on SLA timeline"]},
+                    signals={"reasons": [f"Calculated {c_data['risk'].value} priority risk based on SLA timeline and impact."]},
                     computed_at=c_data["created_at"],
                 )
                 db.add(risk)
@@ -242,13 +343,23 @@ def seed_database():
                     case_id=case_id,
                     suggested_category=c_data["category"],
                     suggested_priority=c_data["priority"].value,
-                    confidence_score=0.92,
+                    confidence_score=0.94,
                     confidence_level=ConfidenceLevel.HIGH,
-                    supporting_factors=[f"Automated AI classification for {c_data['title']}"],
-                    missing_info=["System logs", "Device hostname"] if c_data["priority"] == CasePriority.P1 else [],
+                    supporting_factors=[f"Automated classification: {c_data['title']}"],
+                    missing_info=["System logs", "Endpoint hostname"] if c_data["priority"] in [CasePriority.P1, CasePriority.P2] else [],
                     created_at=c_data["created_at"],
                 )
                 db.add(triage)
+
+                # AI Continuous Summary
+                summary = CaseSummary(
+                    id=uuid.uuid4(),
+                    case_id=case_id,
+                    summary_text=f"Incident {c_data['ref']} concerning {c_data['title']}. Current status is {c_data['status'].value} with {c_data['priority'].value} SLA tier. Assigned Owner: {c_data['owner'].full_name if c_data['owner'] else 'Unassigned'}.",
+                    last_source_message_id=None,
+                    updated_at=c_data["created_at"],
+                )
+                db.add(summary)
 
                 # Messages & Notes
                 msg1 = Message(
@@ -262,25 +373,25 @@ def seed_database():
                 )
                 db.add(msg1)
 
-                if c_data["status"] != CaseStatus.NEW:
+                if c_data["status"] != CaseStatus.NEW and c_data["owner"]:
                     msg2 = Message(
                         id=uuid.uuid4(),
                         case_id=case_id,
-                        author_id=users["operator@paradox.com"].id,
-                        body="Investigating issue with network operations team.",
+                        author_id=c_data["owner"].id,
+                        body=f"Assigned to {c_data['owner'].full_name}. Reviewing telemetry diagnostics and investigating root cause.",
                         visibility=MessageVisibility.INTERNAL_ONLY,
                         ai_generated=False,
                         created_at=c_data["created_at"] + timedelta(minutes=15),
                     )
                     db.add(msg2)
 
-                # AI Draft for P2 Case
-                if c_data["ref"] == "INC-2026-000002":
+                # AI Draft for P2 / P1 Cases
+                if c_data["ref"] in ["INC-2026-000002", "INC-2026-000007"]:
                     draft = CommunicationDraft(
                         id=uuid.uuid4(),
                         case_id=case_id,
                         draft_type=DraftType.INFO_REQUEST,
-                        body="Hello Alice, could you confirm your SAP user ID and department cost center?",
+                        body=f"Hello Alice, this is an automated suggestion from Finny Copilot. Could you confirm your workstation serial number and current office location to accelerate resolution for {c_data['title']}?",
                         status=DraftStatus.DRAFT,
                         created_at=now,
                     )
@@ -299,7 +410,6 @@ def seed_database():
                 )
                 db.add(audit)
 
-
                 print(f"  [+] Created Case: {c_data['ref']} ({c_data['priority'].value}, {c_data['status'].value})")
 
         db.commit()
@@ -314,4 +424,3 @@ def seed_database():
 
 if __name__ == "__main__":
     seed_database()
-

@@ -1,6 +1,9 @@
 from contextlib import asynccontextmanager
+import os
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, RedirectResponse
 from backend.core.config import settings
 from backend.api.health import router as health_router
 from backend.api.auth.routes import router as auth_router
@@ -58,5 +61,37 @@ app.include_router(ai_router, prefix=settings.API_V1_PREFIX)
 app.include_router(admin_router, prefix=settings.API_V1_PREFIX)
 app.include_router(reports_router, prefix=settings.API_V1_PREFIX)
 
+# Stitch UI Direct Web Serving Routes
+STITCH_DIR = Path(__file__).resolve().parent.parent / "stitch_asistiq_incident_management_platform"
 
+@app.get("/ui", tags=["Stitch UI"])
+def get_stitch_ui_index():
+    return RedirectResponse(url="/ui/requester")
 
+@app.get("/ui/requester", tags=["Stitch UI"])
+def get_stitch_requester_ui():
+    file_path = STITCH_DIR / "requester_portal_incident_drawer_nordic_light_pastel" / "code.html"
+    if file_path.exists():
+        return FileResponse(file_path)
+    return {"error": "Stitch requester UI not found"}
+
+@app.get("/ui/operator", tags=["Stitch UI"])
+def get_stitch_operator_ui():
+    file_path = STITCH_DIR / "operator_workbench_airy_pastel_light" / "code.html"
+    if file_path.exists():
+        return FileResponse(file_path)
+    return {"error": "Stitch operator UI not found"}
+
+@app.get("/ui/command-center", tags=["Stitch UI"])
+def get_stitch_command_center_ui():
+    file_path = STITCH_DIR / "incident_command_center_nordic_light_pastel" / "code.html"
+    if file_path.exists():
+        return FileResponse(file_path)
+    return {"error": "Stitch command center UI not found"}
+
+@app.get("/ui/manager", tags=["Stitch UI"])
+def get_stitch_manager_ui():
+    file_path = STITCH_DIR / "manager_operational_insights_nordic_light_pastel" / "code.html"
+    if file_path.exists():
+        return FileResponse(file_path)
+    return {"error": "Stitch manager UI not found"}

@@ -72,3 +72,6 @@ Thumbs.db
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Temp Storage
+temp_storage/

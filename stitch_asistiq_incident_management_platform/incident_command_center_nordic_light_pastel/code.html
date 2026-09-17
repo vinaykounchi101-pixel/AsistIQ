@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..24,300..500,0..1,0&amp;display=swap" rel="stylesheet"/>
+<style>
+    @layer base {
+      html, body { margin: 0; padding: 0; }
+      body { overscroll-behavior: none; }
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            canvas: '#F8FAFC',
+            card: '#FFFFFF',
+            border: '#E2E8F0',
+            'border-subtle': '#F1F5F9',
+            ink: {
+              primary: '#0F172A',
+              secondary: '#475569',
+              muted: '#94A3B8',
+              faint: '#CBD5E1',
+            },
+            pastel: {
+              lavender: '#F5F3FF',
+              'lavender-border': '#DDD6FE',
+              'lavender-text': '#5B21B6',
+              indigo: '#EEF2FF',
+              'indigo-border': '#C7D2FE',
+              'indigo-text': '#4338CA',
+              blush: '#FFF1F2',
+              'blush-border': '#FFE4E6',
+              'blush-text': '#BE123C',
+              sage: '#F0FDFA',
+              'sage-border': '#CCFBF1',
+              'sage-text': '#0F766E',
+              amber: '#FFFBEB',
+              'amber-border': '#FEF3C7',
+              'amber-text': '#B45309',
+            }
+          },
+          boxShadow: {
+            'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 3px 1px rgba(0, 0, 0, 0.02)',
+            'card': '0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02)',
+            'float': '0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.02)',
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-canvas font-sans text-ink-primary antialiased selection:bg-pastel-lavender selection:text-pastel-lavender-text min-h-screen">
+<!-- Left Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-card border-r border-border z-40 flex flex-col justify-between">
+<div class="flex flex-col">
+<!-- App Brand Header -->
+<div class="h-16 px-6 flex items-center justify-between border-b border-border/80">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-pastel-lavender border border-pastel-lavender-border flex items-center justify-center text-pastel-lavender-text font-bold shadow-xs">
+<span class="material-symbols-outlined text-[19px]">bolt</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-bold tracking-tight text-ink-primary text-base">AsistIQ</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-slate-100 text-ink-secondary border border-border">v1.0</span>
+</div>
+</div>
+<span class="w-2 h-2 rounded-full bg-teal-400 ring-4 ring-teal-50" title="System Normal"></span>
+</div>
+<!-- Navigation Links -->
+<div class="px-3 py-6 flex flex-col gap-6 overflow-y-auto">
+<!-- Section: Operations -->
+<div class="flex flex-col gap-1.5">
+<span class="px-3 font-mono text-[10px] font-semibold text-ink-muted uppercase tracking-wider">Operations</span>
+<nav class="flex flex-col gap-0.5">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-pastel-lavender text-pastel-lavender-text font-medium text-sm transition-all border border-pastel-lavender-border/70" href="#">
+<span class="material-symbols-outlined text-[18px]">inbox</span>
+<span>Cases / Workspaces</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-ink-secondary hover:text-ink-primary hover:bg-slate-50 transition-colors text-sm font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>New Incident</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-ink-secondary hover:text-ink-primary hover:bg-slate-50 transition-colors text-sm font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]">groups</span>
+<span>Team Dispatch</span>
+</a>
+</nav>
+</div>
+<!-- Section: Insights -->
+<div class="flex flex-col gap-1.5">
+<span class="px-3 font-mono text-[10px] font-semibold text-ink-muted uppercase tracking-wider">Insights &amp; Assets</span>
+<nav class="flex flex-col gap-0.5">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-ink-secondary hover:text-ink-primary hover:bg-slate-50 transition-colors text-sm font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]">insights</span>
+<span>Executive Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-ink-secondary hover:text-ink-primary hover:bg-slate-50 transition-colors text-sm font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]">menu_book</span>
+<span>Knowledge Base</span>
+</a>
+</nav>
+</div>
+<!-- Section: Governance -->
+<div class="flex flex-col gap-1.5">
+<span class="px-3 font-mono text-[10px] font-semibold text-ink-muted uppercase tracking-wider">Governance</span>
+<nav class="flex flex-col gap-0.5">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-ink-secondary hover:text-ink-primary hover:bg-slate-50 transition-colors text-sm font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]">monitor_heart</span>
+<span>System Sweeps</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-ink-secondary hover:text-ink-primary hover:bg-slate-50 transition-colors text-sm font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]">badge</span>
+<span>User Directory</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-ink-secondary hover:text-ink-primary hover:bg-slate-50 transition-colors text-sm font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]">policy</span>
+<span>Security Audit</span>
+</a>
+</nav>
+</div>
+</div>
+</div>
+<!-- User Profile Footer -->
+<div class="p-3 border-t border-border bg-slate-50/70 m-2 rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-8 h-8 rounded-full bg-pastel-indigo border border-pastel-indigo-border text-pastel-indigo-text font-bold text-xs flex items-center justify-center flex-shrink-0">
+          BO
+        </div>
+<div class="flex flex-col min-w-0">
+<span class="text-xs font-semibold text-ink-primary truncate leading-tight">Bob Operator</span>
+<span class="text-[10px] font-mono text-ink-muted truncate">L2 Incident Eng</span>
+</div>
+</div>
+<button class="p-1 text-ink-muted hover:text-ink-secondary rounded transition-colors" title="Settings / Logout">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+</button>
+</div>
+</aside>
+<!-- Main Canvas Wrapper -->
+<div class="pl-64 flex flex-col min-h-screen">
+<!-- Top Nav Header -->
+<header class="sticky top-0 z-30 h-16 bg-card/90 backdrop-blur-md border-b border-border px-8 flex items-center justify-between">
+<!-- Search Field -->
+<div class="flex items-center gap-3 flex-1 max-w-lg">
+<div class="flex items-center gap-2.5 px-3.5 py-1.5 rounded-lg bg-slate-50 border border-border text-ink-muted w-full focus-within:border-pastel-lavender-border focus-within:bg-white focus-within:ring-2 focus-within:ring-pastel-lavender/50 transition-all">
+<span class="material-symbols-outlined text-[18px] text-ink-muted">search</span>
+<input class="bg-transparent text-sm text-ink-primary placeholder-ink-muted/80 focus:outline-none w-full" placeholder="Search incidents, telemetry, alerts..." type="text"/>
+<kbd class="px-1.5 py-0.5 rounded bg-white border border-border text-ink-muted font-mono text-[10px]">⌘K</kbd>
+</div>
+</div>
+<!-- Right Header Controls -->
+<div class="flex items-center gap-4">
+<!-- Telemetry Status Pill -->
+<div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-pastel-sage border border-pastel-sage-border text-pastel-sage-text text-xs font-mono font-medium">
+<span class="w-2 h-2 rounded-full bg-teal-500"></span>
+<span>Scheduler: Active</span>
+</div>
+<!-- Theme Picker Indicator -->
+<div class="flex items-center p-0.5 bg-slate-100 rounded-lg border border-border/70 text-xs font-medium text-ink-secondary">
+<button class="px-2.5 py-1 rounded-md bg-white shadow-xs font-semibold text-ink-primary transition-all">Light</button>
+<button class="px-2.5 py-1 rounded-md hover:text-ink-primary transition-all">Pastel Dark</button>
+<button class="px-2.5 py-1 rounded-md hover:text-ink-primary transition-all">Dusk</button>
+</div>
+<!-- Notification & Role Selector -->
+<div class="flex items-center gap-2 pl-2 border-l border-border">
+<button class="relative p-2 rounded-lg text-ink-secondary hover:bg-slate-100 hover:text-ink-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute 1 top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white"></span>
+</button>
+<div class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-50 border border-border text-ink-secondary hover:text-ink-primary cursor-pointer text-xs font-medium">
+<span class="material-symbols-outlined text-[16px] text-ink-muted">manage_accounts</span>
+<span>Operator View</span>
+<span class="material-symbols-outlined text-[14px]">expand_more</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Workspace Container -->
+<main class="flex-1 p-8 max-w-[1680px] w-full mx-auto">
+<!-- Breadcrumb & Incident Meta Bar -->
+<div class="flex flex-wrap items-center justify-between gap-4 p-5 mb-8 bg-card rounded-2xl border border-border shadow-card">
+<div class="flex items-center gap-3 min-w-0">
+<a class="flex items-center gap-1 text-ink-muted hover:text-pastel-lavender-text font-mono text-xs transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+<span>Queue</span>
+</a>
+<span class="text-ink-faint">/</span>
+<span class="font-mono text-xs font-bold text-pastel-indigo-text bg-pastel-indigo px-2.5 py-1 rounded-md border border-pastel-indigo-border">
+            INC-2026-000002
+          </span>
+<span class="font-mono text-[11px] text-ink-secondary px-2 py-0.5 rounded bg-slate-100 border border-border">v2-shield</span>
+<h1 class="text-base font-semibold text-ink-primary tracking-tight truncate pl-1 hidden md:inline">
+            VPN Gateway Packet Loss &amp; SSO Latency
+          </h1>
+</div>
+<!-- Status Badges -->
+<div class="flex items-center gap-2.5 flex-shrink-0">
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-pastel-blush border border-pastel-blush-border text-pastel-blush-text font-mono text-xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+<span>P1 CRITICAL</span>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-pastel-sage border border-pastel-sage-border text-pastel-sage-text font-mono text-xs font-medium">
+<span class="material-symbols-outlined text-[14px]">sync</span>
+<span>AUTOSYNC: READY</span>
+</div>
+</div>
+</div>
+<!-- 3-Column Command Center Grid with Generous Spacing -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- ========================================================================= -->
+<!-- COLUMN 1: LEFT CONTROLS & METRICS (lg:col-span-3)                         -->
+<!-- ========================================================================= -->
+<div class="lg:col-span-3 flex flex-col gap-6">
+<!-- Identity & Lifecycle State -->
+<div class="bg-card rounded-2xl p-6 border border-border shadow-card flex flex-col gap-5">
+<div class="flex items-start justify-between">
+<div>
+<span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-ink-muted">Incident Identifier</span>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-mono text-sm font-bold text-ink-primary">INC-2026-000002</span>
+<span class="px-1.5 py-0.5 rounded bg-slate-100 text-ink-secondary border border-border font-mono text-[10px] font-semibold">v2</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-ink-muted text-[20px]">verified_user</span>
+</div>
+<!-- Lifecycle Stage Rail -->
+<div class="flex flex-col gap-2">
+<label class="font-mono text-[10px] font-semibold uppercase tracking-wider text-ink-muted">Lifecycle State</label>
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between px-3.5 py-2 rounded-xl bg-pastel-lavender border border-pastel-lavender-border text-pastel-lavender-text font-mono text-xs font-semibold">
+<span class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-purple-600"></span>
+<span>In Assessment</span>
+</span>
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+</div>
+<button class="flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50/60 hover:bg-slate-100/80 border border-transparent hover:border-border text-ink-secondary hover:text-ink-primary transition-all font-mono text-xs">
+<span>Assigned</span>
+<span class="material-symbols-outlined text-[15px] text-ink-muted">arrow_forward</span>
+</button>
+<button class="flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50/60 hover:bg-slate-100/80 border border-transparent hover:border-border text-ink-secondary hover:text-ink-primary transition-all font-mono text-xs">
+<span>Awaiting Requester</span>
+<span class="material-symbols-outlined text-[15px] text-ink-muted">schedule</span>
+</button>
+<button class="flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50/60 hover:bg-slate-100/80 border border-transparent hover:border-border text-ink-secondary hover:text-ink-primary transition-all font-mono text-xs">
+<span>Resolved</span>
+<span class="material-symbols-outlined text-[15px] text-ink-muted">task_alt</span>
+</button>
+<button class="flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50/60 hover:bg-slate-100/80 border border-transparent hover:border-border text-ink-secondary hover:text-ink-primary transition-all font-mono text-xs">
+<span>Closed</span>
+<span class="material-symbols-outlined text-[15px] text-ink-muted">lock</span>
+</button>
+</div>
+</div>
+</div>
+<!-- SLA Targets Card with Airy Layout -->
+<div class="bg-card rounded-2xl p-6 border border-border shadow-card flex flex-col gap-5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-pastel-indigo-text text-[18px]">timelapse</span>
+<span class="text-sm font-semibold text-ink-primary">SLA Targets</span>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-pastel-indigo border border-pastel-indigo-border text-pastel-indigo-text">P1 Target</span>
+</div>
+<div class="flex items-center gap-5">
+<!-- Radial Meter -->
+<div class="relative w-20 h-20 flex-shrink-0 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<path class="text-slate-100 stroke-current" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3"></path>
+<path class="text-indigo-500 stroke-current" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-dasharray="68, 100" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<div class="absolute flex flex-col items-center justify-center text-center">
+<span class="font-mono text-xs font-bold text-ink-primary">68%</span>
+<span class="font-mono text-[8px] uppercase tracking-wider text-ink-muted">Elapsed</span>
+</div>
+</div>
+<!-- Metrics Summary -->
+<div class="flex flex-col gap-3 min-w-0 flex-1">
+<div>
+<div class="flex items-center justify-between font-mono text-[11px]">
+<span class="text-ink-secondary">Response SLA</span>
+<span class="text-pastel-sage-text font-semibold bg-pastel-sage px-1.5 rounded border border-pastel-sage-border">Met 8m</span>
+</div>
+<div class="w-full bg-slate-100 rounded-full h-1.5 mt-1.5 overflow-hidden">
+<div class="bg-teal-500 h-full w-full rounded-full"></div>
+</div>
+</div>
+<div>
+<div class="flex items-center justify-between font-mono text-[11px]">
+<span class="text-ink-secondary">Resolve Limit</span>
+<span class="text-indigo-600 font-semibold">18:00 UTC</span>
+</div>
+<div class="w-full bg-slate-100 rounded-full h-1.5 mt-1.5 overflow-hidden">
+<div class="bg-indigo-500 h-full rounded-full" style="width: 68%;"></div>
+</div>
+<span class="font-mono text-[10px] text-ink-muted mt-1 block">3h 42m remaining</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Requester & Assignee Profile -->
+<div class="bg-card rounded-2xl p-6 border border-border shadow-card flex flex-col gap-5">
+<div class="flex flex-col gap-2">
+<span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-ink-muted">Requester Profile</span>
+<div class="flex items-center gap-3.5 p-3 rounded-xl bg-slate-50 border border-border/80">
+<div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border border-border shadow-xs">
+<img alt="Alice Requester" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBe3bIjrnO6e6pCMryPdXLU1YNQMLEBenkebKVbm3NDC7LEwvJBdAl2YYBI4xYtgZhDHDJt-Z_fkQeY9Gju263Vdqe1W92F6g5ClG0lMTp--alslLhHP56h0VTTuc2FHy8FyqaEtB8JFvcKHuVFYT9WBis8d-EHCowcBTKh8IncyNvcjtCT2W_Dl_7JGw_gf56wxxPCmB7flYAZKZRlW4Rg3P3cltCfYXWI-s_-x59ZY1Y8F8YiaLcD"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="text-xs font-semibold text-ink-primary truncate">Alice Requester</span>
+<span class="font-mono text-[11px] text-ink-muted truncate">requester@paradox.com</span>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="px-1.5 py-0.5 rounded bg-white text-ink-secondary font-mono text-[9px] border border-border">Finance Dept</span>
+<span class="px-1.5 py-0.5 rounded bg-white text-ink-secondary font-mono text-[9px] border border-border">Austin Core</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Assignee -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-ink-muted">Assigned Specialist</span>
+<button class="font-mono text-[11px] text-pastel-lavender-text hover:underline">Reassign</button>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-border/80">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-7 h-7 rounded-full bg-pastel-lavender border border-pastel-lavender-border text-pastel-lavender-text flex items-center justify-center font-bold text-xs font-mono">
+                    BO
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="text-xs font-medium text-ink-primary truncate">Bob Operator</span>
+<span class="font-mono text-[10px] text-ink-muted truncate">Tier 1 Support (Shift A)</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-ink-muted text-[18px]">unfold_more</span>
+</div>
+</div>
+</div>
+<!-- Risk Vector Analysis Pill -->
+<div class="bg-card rounded-2xl p-6 border border-border shadow-card flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-ink-muted">Risk Vector Analysis</span>
+<span class="px-2 py-0.5 rounded bg-pastel-blush border border-pastel-blush-border text-pastel-blush-text font-mono text-[10px] font-bold">HIGH RISK • 0.84</span>
+</div>
+<div class="grid grid-cols-3 gap-2 mt-1 font-mono text-center">
+<div class="bg-slate-50 p-2 rounded-xl border border-border">
+<span class="text-ink-muted text-[10px] block">Inactivity</span>
+<span class="text-ink-primary text-xs font-semibold">1.2h</span>
+</div>
+<div class="bg-slate-50 p-2 rounded-xl border border-border">
+<span class="text-ink-muted text-[10px] block">Follow-ups</span>
+<span class="text-pastel-indigo-text text-xs font-semibold">2</span>
+</div>
+<div class="bg-slate-50 p-2 rounded-xl border border-border">
+<span class="text-ink-muted text-[10px] block">Reassigns</span>
+<span class="text-ink-primary text-xs font-semibold">1</span>
+</div>
+</div>
+</div>
+<!-- Attachments Quota Card -->
+<div class="bg-card rounded-2xl p-6 border border-border shadow-card flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-ink-secondary text-[16px]">attachment</span>
+<span class="text-xs font-semibold text-ink-primary">Case Attachments (2)</span>
+</div>
+<span class="font-mono text-[10px] text-ink-muted">2.4MB / 50MB</span>
+</div>
+<div class="w-full bg-slate-100 rounded-full h-1 overflow-hidden">
+<div class="bg-pastel-indigo-text h-full" style="width: 5%;"></div>
+</div>
+<div class="flex flex-col gap-2 mt-1">
+<a class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100/80 border border-border transition-colors" href="#">
+<div class="flex items-center gap-2 truncate">
+<span class="material-symbols-outlined text-ink-muted text-[16px]">description</span>
+<span class="font-mono text-xs text-ink-primary truncate">vpn_error_log.txt</span>
+</div>
+<span class="font-mono text-[10px] text-ink-muted flex-shrink-0">42 KB</span>
+</a>
+<a class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100/80 border border-border transition-colors" href="#">
+<div class="flex items-center gap-2 truncate">
+<span class="material-symbols-outlined text-ink-muted text-[16px]">image</span>
+<span class="font-mono text-xs text-ink-primary truncate">screen_dump.png</span>
+</div>
+<span class="font-mono text-[10px] text-ink-muted flex-shrink-0">1.4 MB</span>
+</a>
+</div>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- COLUMN 2: CENTER STREAM & COMPOSER (lg:col-span-5)                        -->
+<!-- ========================================================================= -->
+<div class="lg:col-span-5 flex flex-col gap-6">
+<!-- SLA Ticker Bar -->
+<div class="bg-card rounded-2xl px-6 py-4 border border-border shadow-card flex flex-wrap items-center justify-between gap-3">
+<div class="flex items-center gap-2 min-w-0">
+<span class="material-symbols-outlined text-pastel-indigo-text text-[18px]">timer</span>
+<div class="font-mono text-xs text-ink-secondary truncate">
+<span class="text-ink-muted">Resp:</span>
+<span class="text-pastel-sage-text font-semibold mx-1">00:09:42 [MET]</span>
+<span class="text-ink-faint mx-1.5">|</span>
+<span class="text-ink-muted">Resolve:</span>
+<span class="text-pastel-indigo-text font-semibold ml-1">03:45:10</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-slate-100 border border-border text-ink-muted font-mono text-[10px] uppercase">
+              P1 Limit: 4h
+            </span>
+</div>
+<!-- Optimistic Locking Banner -->
+<div class="bg-pastel-sage rounded-xl px-5 py-3 border border-pastel-sage-border flex items-center justify-between">
+<div class="flex items-center gap-2.5 text-xs text-pastel-sage-text">
+<span class="material-symbols-outlined text-[17px]">verified_user</span>
+<span><strong class="font-semibold">Concurrency Shield Active</strong> • Version 2 locked (Safe to dispatch)</span>
+</div>
+<button class="text-pastel-sage-text hover:text-teal-900 transition-colors p-1" title="Check race locks">
+<span class="material-symbols-outlined text-[15px]">sync</span>
+</button>
+</div>
+<!-- Thread Stream Cards -->
+<div class="flex flex-col gap-5">
+<!-- 1. Requester Incoming Message Card -->
+<div class="bg-card rounded-2xl p-6 border border-border shadow-card flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-pastel-amber border border-pastel-amber-border text-pastel-amber-text flex items-center justify-center font-bold font-mono text-xs">
+                    AR
+                  </div>
+<div class="flex flex-col">
+<span class="text-xs font-semibold text-ink-primary">Alice Requester</span>
+<span class="font-mono text-[10px] text-ink-muted">Austin Core • requester@paradox.com</span>
+</div>
+</div>
+<span class="font-mono text-[11px] text-ink-muted">12m ago</span>
+</div>
+<div class="p-4 rounded-xl bg-slate-50 border border-border text-ink-primary text-sm leading-relaxed">
+                Cannot connect to Cisco AnyConnect VPN client. Getting <span class="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-pastel-blush border border-pastel-blush-border text-pastel-blush-text">error 403 authorization failed</span> when authenticating with Okta SSO. This is blocking month-end general ledger reconciliations.
+              </div>
+</div>
+<!-- 2. AI Finny Assist Diagnostic Card -->
+<div class="bg-pastel-lavender/40 rounded-2xl p-6 border border-pastel-lavender-border shadow-card flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-lg bg-pastel-lavender border border-pastel-lavender-border text-pastel-lavender-text flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">auto_awesome</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-pastel-lavender-text">Finny Diagnostic Assistant</span>
+<span class="px-2 py-0.5 rounded-full bg-white text-pastel-lavender-text border border-pastel-lavender-border font-mono text-[9px] uppercase font-semibold">Auto-Triage</span>
+</div>
+</div>
+<span class="font-mono text-[11px] text-ink-muted">10m ago</span>
+</div>
+<div class="bg-white rounded-xl p-4 border border-pastel-lavender-border/80 text-xs font-mono flex flex-col gap-2">
+<div class="flex items-start gap-2 text-ink-primary font-medium">
+<span class="material-symbols-outlined text-pastel-lavender-text text-[16px] mt-0.5">insights</span>
+<span><strong>Root hypothesis:</strong> Expired machine certificate or Okta token desync.</span>
+</div>
+<p class="text-ink-secondary pl-6 leading-relaxed text-[11px]">
+                  Telemetry correlated: 3 identical incidents successfully closed within last 4 hours on gateway cluster <span class="text-pastel-indigo-text font-semibold">vpn-gw-tx-04</span>. Recommend cert re-enrollment push via Intune endpoint agent.
+                </p>
+</div>
+</div>
+<!-- 3. Staff Internal Note Card -->
+<div class="bg-card rounded-2xl p-6 border border-border shadow-card flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-lg bg-slate-100 text-ink-secondary border border-border flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">lock</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-ink-primary">Bob Operator</span>
+<span class="px-2 py-0.5 rounded bg-slate-100 border border-border text-ink-secondary font-mono text-[10px] font-semibold">
+                      🔒 Staff Internal Note
+                    </span>
+</div>
+</div>
+<span class="font-mono text-[11px] text-ink-muted">6m ago</span>
+</div>
+<div class="p-4 rounded-xl bg-slate-50 border border-border text-ink-primary text-sm leading-relaxed">
+                Checked FreeRADIUS authorization logs on tx-cluster. User certificate fingerprint expired at <span class="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-pastel-blush border border-pastel-blush-border text-pastel-blush-text">08:00:00 UTC</span>. Need manual Intune cert renewal trigger or Alice to initiate Company Portal Device Sync.
+              </div>
+</div>
+</div>
+<!-- Rich Composer Box -->
+<div class="bg-card rounded-2xl p-6 border border-border shadow-float flex flex-col gap-4">
+<!-- Composer Toolbar & Mode Toggles -->
+<div class="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-border">
+<!-- Visibility Switch -->
+<div class="flex items-center bg-slate-100 p-1 rounded-xl border border-border/60 text-xs">
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white shadow-xs text-ink-primary font-semibold transition-all" id="btnPublicMode">
+<span class="material-symbols-outlined text-[15px] text-pastel-lavender-text">public</span>
+<span>Public Response (Stops SLA)</span>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-ink-muted hover:text-ink-primary transition-all" id="btnStaffMode">
+<span class="material-symbols-outlined text-[15px]">lock</span>
+<span>Staff Internal</span>
+</button>
+</div>
+<!-- Formatting Buttons -->
+<div class="flex items-center gap-1">
+<button class="p-1.5 rounded-lg text-ink-muted hover:text-ink-primary hover:bg-slate-100 transition-colors" title="Bold">
+<span class="material-symbols-outlined text-[17px]">format_bold</span>
+</button>
+<button class="p-1.5 rounded-lg text-ink-muted hover:text-ink-primary hover:bg-slate-100 transition-colors" title="Italic">
+<span class="material-symbols-outlined text-[17px]">format_italic</span>
+</button>
+<button class="p-1.5 rounded-lg text-ink-muted hover:text-ink-primary hover:bg-slate-100 transition-colors" title="Code">
+<span class="material-symbols-outlined text-[17px]">code</span>
+</button>
+<button class="p-1.5 rounded-lg text-ink-muted hover:text-ink-primary hover:bg-slate-100 transition-colors" title="Attach file">
+<span class="material-symbols-outlined text-[17px]">attach_file</span>
+</button>
+<div class="w-px h-4 bg-border mx-1"></div>
+<button class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-pastel-lavender border border-pastel-lavender-border text-pastel-lavender-text hover:bg-pastel-lavender/80 transition-all font-mono text-[11px] font-semibold" id="btnInsertFinny" title="Insert Finny Draft">
+<span class="material-symbols-outlined text-[14px]">auto_awesome</span>
+<span>Paste Finny Draft</span>
+</button>
+</div>
+</div>
+<!-- Textarea -->
+<div class="relative">
+<textarea class="w-full rounded-xl bg-slate-50/70 p-4 text-ink-primary placeholder-ink-muted text-sm leading-relaxed border border-border focus:border-pastel-lavender-border focus:bg-white focus:ring-2 focus:ring-pastel-lavender/50 focus:outline-none transition-all resize-none" id="composerTextarea" placeholder="Type public response to requester or insert AI suggestion..." rows="4"></textarea>
+</div>
+<!-- Footer Action Controls -->
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-2 text-ink-muted font-mono text-xs">
+<span class="material-symbols-outlined text-[15px]">keyboard</span>
+<span>Press ⌘+Enter to submit</span>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-ink-secondary text-xs font-semibold transition-colors">
+                  Save Draft
+                </button>
+<button class="flex items-center gap-2 px-5 py-2 rounded-xl bg-pastel-lavender-text hover:bg-indigo-900 text-white font-medium text-xs shadow-card transition-all">
+<span>Send Message</span>
+<span class="material-symbols-outlined text-[15px]">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- COLUMN 3: FINNY COPILOT AIRY LIGHT PANEL (lg:col-span-4)                  -->
+<!-- ========================================================================= -->
+<div class="lg:col-span-4 flex flex-col gap-6">
+<!-- Finny Header Card -->
+<div class="bg-card rounded-2xl p-6 border border-border shadow-card flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-pastel-lavender border border-pastel-lavender-border text-pastel-lavender-text flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="text-sm font-bold text-ink-primary">Finny Copilot</span>
+<span class="w-2 h-2 rounded-full bg-teal-500"></span>
+</div>
+<span class="font-mono text-[11px] text-ink-muted">Gemini 1.5 Flash • Active</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-mono text-[9px] uppercase tracking-wider text-ink-muted block">Confidence</span>
+<span class="font-mono text-xs font-bold text-pastel-sage-text bg-pastel-sage px-2 py-0.5 rounded border border-pastel-sage-border">92% High</span>
+</div>
+</div>
+<!-- Finny Multi-Tab Navigation -->
+<div class="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl border border-border/60 font-mono text-xs font-semibold">
+<button class="py-1.5 rounded-lg bg-white shadow-xs text-ink-primary transition-all text-center" id="tabTriageBtn">
+                1. Triage
+              </button>
+<button class="py-1.5 rounded-lg text-ink-muted hover:text-ink-primary transition-all text-center" id="tabSummaryBtn">
+                2. Summary
+              </button>
+<button class="py-1.5 rounded-lg text-ink-muted hover:text-ink-primary transition-all text-center" id="tabDraftsBtn">
+                3. Drafts
+              </button>
+</div>
+</div>
+<!-- TAB PANEL 1: Intake Triage -->
+<div class="bg-card rounded-2xl p-6 border border-border shadow-card flex flex-col gap-5" id="panelTriage">
+<div class="flex items-center justify-between">
+<span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-ink-muted">Categorization &amp; Impact</span>
+<span class="font-mono text-xs font-bold text-pastel-sage-text bg-pastel-sage px-2 py-0.5 rounded border border-pastel-sage-border">Classified 94%</span>
+</div>
+<div class="flex flex-col gap-2.5">
+<div class="p-3.5 rounded-xl bg-slate-50 border border-border flex flex-col gap-1">
+<span class="font-mono text-[10px] text-ink-muted uppercase">Predicted Category</span>
+<span class="text-xs font-semibold text-pastel-indigo-text">Security / VPN &amp; Network Access</span>
+</div>
+<div class="p-3.5 rounded-xl bg-slate-50 border border-border flex flex-col gap-1">
+<span class="font-mono text-[10px] text-ink-muted uppercase">Severity Justification</span>
+<span class="text-xs font-semibold text-ink-primary">P1 Critical • Finance Dept Q3 Close</span>
+<span class="text-xs text-ink-secondary leading-relaxed mt-0.5">High organizational blast radius during financial window.</span>
+</div>
+</div>
+<!-- Missing Info Alert -->
+<div class="p-3.5 rounded-xl bg-pastel-amber border border-pastel-amber-border flex items-start gap-2.5">
+<span class="material-symbols-outlined text-pastel-amber-text text-[18px] flex-shrink-0 mt-0.5">warning</span>
+<div class="flex flex-col text-xs">
+<span class="font-semibold text-pastel-amber-text">Missing Telemetry</span>
+<span class="text-amber-900/80 text-[11px] mt-0.5">VPN client version &amp; OS build not declared in prompt.</span>
+</div>
+</div>
+<!-- Correlated Cases -->
+<div class="flex flex-col gap-2">
+<span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-ink-muted">Correlated Incidents (2)</span>
+<div class="flex flex-col gap-1.5 font-mono text-xs">
+<a class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100/80 border border-border transition-colors" href="#">
+<span class="text-pastel-indigo-text font-semibold">INC-2026-000008</span>
+<span class="text-pastel-sage-text font-medium text-[11px]">Resolved (Cert)</span>
+</a>
+<a class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100/80 border border-border transition-colors" href="#">
+<span class="text-pastel-indigo-text font-semibold">INC-2026-000014</span>
+<span class="text-pastel-sage-text font-medium text-[11px]">Resolved (Intune)</span>
+</a>
+</div>
+</div>
+</div>
+<!-- TAB PANEL 2: Continuous Case Summary -->
+<div class="bg-card rounded-2xl p-6 border border-border shadow-card flex flex-col gap-5" id="panelSummary">
+<div class="flex items-center justify-between">
+<span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-ink-muted">Real-Time Synthesis</span>
+<span class="px-2 py-0.5 rounded bg-slate-100 border border-border text-ink-secondary font-mono text-[10px]">Updated 1m ago</span>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-border">
+<span class="w-5 h-5 rounded-full bg-pastel-lavender border border-pastel-lavender-border text-pastel-lavender-text flex items-center justify-center font-mono text-[10px] font-bold flex-shrink-0 mt-0.5">1</span>
+<p class="text-xs text-ink-secondary leading-relaxed">
+                  Requester reported Okta SSO 403 on Cisco AnyConnect VPN at 09:15 UTC blocking month-end operations.
+                </p>
+</div>
+<div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-border">
+<span class="w-5 h-5 rounded-full bg-pastel-lavender border border-pastel-lavender-border text-pastel-lavender-text flex items-center justify-center font-mono text-[10px] font-bold flex-shrink-0 mt-0.5">2</span>
+<p class="text-xs text-ink-secondary leading-relaxed">
+                  Tier 1 Operator confirmed machine certificate expiration via RADIUS server authorization timestamps.
+                </p>
+</div>
+<div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-border">
+<span class="w-5 h-5 rounded-full bg-pastel-lavender border border-pastel-lavender-border text-pastel-lavender-text flex items-center justify-center font-mono text-[10px] font-bold flex-shrink-0 mt-0.5">3</span>
+<p class="text-xs text-ink-secondary leading-relaxed">
+                  Awaiting user-triggered Company Portal device sync or endpoint management certificate renewal push.
+                </p>
+</div>
+</div>
+<!-- Diagnostic Pulse Sparkline -->
+<div class="p-4 rounded-xl bg-slate-50 border border-border flex flex-col gap-2">
+<div class="flex items-center justify-between font-mono text-xs">
+<span class="text-ink-muted">Gateway Latency Telemetry</span>
+<span class="text-rose-600 font-semibold">Spike: 412ms</span>
+</div>
+<svg class="w-full h-12 text-indigo-400" fill="none" viewbox="0 0 200 40">
+<path d="M0 30 Q 20 28, 40 29 T 80 28 T 110 32 T 130 5 T 150 35 T 180 30 L 200 30" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path>
+<circle cx="130" cy="5" fill="#BE123C" r="3.5"></circle>
+</svg>
+</div>
+</div>
+<!-- TAB PANEL 3: HITL Communication Drafts -->
+<div class="bg-card rounded-2xl p-6 border border-border shadow-float flex flex-col gap-5" id="panelDrafts">
+<div class="flex items-center justify-between">
+<span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-ink-muted">HITL Communication Drafts</span>
+<span class="px-2 py-0.5 rounded bg-pastel-sage border border-pastel-sage-border text-pastel-sage-text font-mono text-[10px] font-bold">Ready</span>
+</div>
+<!-- Draft Strategy Selector -->
+<div class="flex flex-col gap-1.5">
+<label class="font-mono text-[10px] text-ink-muted uppercase">Template Type</label>
+<div class="bg-slate-50 border border-border rounded-xl px-3 py-2 flex items-center justify-between">
+<span class="text-xs text-ink-primary font-medium truncate">Clarification / Certificate Renewal Guide</span>
+<span class="material-symbols-outlined text-ink-muted text-[16px]">expand_more</span>
+</div>
+</div>
+<!-- Finny Pre-generated Editable Draft -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-mono text-[10px] text-ink-muted uppercase">Generated Response</span>
+<button class="font-mono text-[11px] text-pastel-lavender-text hover:underline flex items-center gap-1" id="btnCopyDraft">
+<span class="material-symbols-outlined text-[13px]">content_copy</span>
+<span>Copy</span>
+</button>
+</div>
+<div class="p-4 rounded-xl bg-slate-50 border border-border text-xs text-ink-secondary leading-relaxed" id="finnyDraftContent">
+                Hi Alice, we identified an expired machine certificate causing your Okta 403 error on Cisco AnyConnect. Please open Company Portal &gt; Device Sync to refresh your cert immediately, or follow KB-0041 to perform manual re-enrollment. Let us know as soon as the sync finishes.
+              </div>
+</div>
+<!-- Fast Action Button -->
+<button class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-pastel-lavender-text hover:bg-indigo-900 text-white font-semibold text-xs transition-all shadow-card" id="btnApproveDraft">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+<span>Approve &amp; Post Publicly (Stops SLA)</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Interactive Logic for Tab Switching & Composer Injection -->
+<script>
+    (function() {
+      const tabTriageBtn = document.getElementById('tabTriageBtn');
+      const tabSummaryBtn = document.getElementById('tabSummaryBtn');
+      const tabDraftsBtn = document.getElementById('tabDraftsBtn');
+      
+      const panelTriage = document.getElementById('panelTriage');
+      const panelSummary = document.getElementById('panelSummary');
+      const panelDrafts = document.getElementById('panelDrafts');
+
+      const composer = document.getElementById('composerTextarea');
+      const finnyDraft = document.getElementById('finnyDraftContent');
+      const insertFinnyBtn = document.getElementById('btnInsertFinny');
+      const approveDraftBtn = document.getElementById('btnApproveDraft');
+      const copyDraftBtn = document.getElementById('btnCopyDraft');
+
+      const btnPublicMode = document.getElementById('btnPublicMode');
+      const btnStaffMode = document.getElementById('btnStaffMode');
+
+      function activateTab(activeBtn, targetPanel) {
+        [tabTriageBtn, tabSummaryBtn, tabDraftsBtn].forEach(btn => {
+          btn.classList.remove('bg-white', 'shadow-xs', 'text-ink-primary');
+          btn.classList.add('text-ink-muted');
+        });
+        activeBtn.classList.add('bg-white', 'shadow-xs', 'text-ink-primary');
+        activeBtn.classList.remove('text-ink-muted');
+
+        targetPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      if (tabTriageBtn && panelTriage) {
+        tabTriageBtn.addEventListener('click', () => activateTab(tabTriageBtn, panelTriage));
+      }
+      if (tabSummaryBtn && panelSummary) {
+        tabSummaryBtn.addEventListener('click', () => activateTab(tabSummaryBtn, panelSummary));
+      }
+      if (tabDraftsBtn && panelDrafts) {
+        tabDraftsBtn.addEventListener('click', () => activateTab(tabDraftsBtn, panelDrafts));
+      }
+
+      function insertDraft() {
+        if (composer && finnyDraft) {
+          composer.value = finnyDraft.innerText.trim();
+          composer.focus();
+        }
+      }
+
+      if (insertFinnyBtn) insertFinnyBtn.addEventListener('click', insertDraft);
+      if (approveDraftBtn) approveDraftBtn.addEventListener('click', insertDraft);
+
+      if (copyDraftBtn && finnyDraft) {
+        copyDraftBtn.addEventListener('click', () => {
+          navigator.clipboard.writeText(finnyDraft.innerText.trim());
+          const originalText = copyDraftBtn.innerHTML;
+          copyDraftBtn.innerHTML = '<span class="material-symbols-outlined text-[13px]">done</span> Copied';
+          setTimeout(() => { copyDraftBtn.innerHTML = originalText; }, 2000);
+        });
+      }
+
+      // Public vs Staff internal toggle
+      if (btnPublicMode && btnStaffMode) {
+        btnPublicMode.addEventListener('click', () => {
+          btnPublicMode.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white shadow-xs text-ink-primary font-semibold transition-all';
+          btnStaffMode.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-ink-muted hover:text-ink-primary transition-all';
+        });
+
+        btnStaffMode.addEventListener('click', () => {
+          btnStaffMode.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white shadow-xs text-ink-primary font-semibold transition-all';
+          btnPublicMode.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-ink-muted hover:text-ink-primary transition-all';
+        });
+      }
+    })();
+  </script>
+</body></html>

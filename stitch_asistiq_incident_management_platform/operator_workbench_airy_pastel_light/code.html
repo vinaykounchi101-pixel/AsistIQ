@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AsistIQ - Operator Workload Workbench</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Source+Sans+3:wght@400;500;600&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    @layer base {
+      html, body { margin: 0; padding: 0; }
+      body { overscroll-behavior: none; }
+      main > :first-child { margin-top: 0 !important; }
+      main > :last-child { margin-bottom: 0 !important; }
+    }
+    ::-webkit-scrollbar { display: none; }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: "#f5f6ff",
+              100: "#ebedff",
+              200: "#dce1ff",
+              500: "#465484",
+              600: "#364474",
+              700: "#2a365f"
+            },
+            pastel: {
+              sky: "#BAE6FD",
+              skySubtle: "#F0F9FF",
+              lavender: "#E9D5FF",
+              lavenderSubtle: "#FAF5FF",
+              teal: "#CCFBF1",
+              tealSubtle: "#F0FDFA",
+              apricot: "#FED7AA",
+              apricotSubtle: "#FFF7ED",
+              rose: "#FFE4E6",
+              roseSubtle: "#FFF1F2"
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            body: ['"Source Sans 3"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-[#F8FAFC] text-slate-800 font-body antialiased min-h-screen">
+<!-- Left Navigation Sidebar -->
+<aside class="fixed left-0 top-0 h-full w-72 bg-white border-r border-slate-200 z-50 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+<div class="flex flex-col">
+<!-- Sidebar Brand Header -->
+<div class="h-16 px-6 flex items-center gap-3 border-b border-slate-100">
+<div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
+<span class="material-symbols-outlined text-[22px]">bolt</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-sans text-lg tracking-tight text-slate-900 font-bold">AsistIQ</span>
+<span class="px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-slate-100 text-slate-500">v1.0.0</span>
+</div>
+<span class="ml-auto px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[11px] font-sans font-medium">Operator</span>
+</div>
+<!-- Navigation Links -->
+<div class="px-4 py-6 flex flex-col gap-6 overflow-y-auto">
+<!-- Section: Operations -->
+<div class="flex flex-col gap-1.5">
+<span class="px-3 text-[11px] font-semibold text-slate-400 uppercase tracking-wider font-sans">Operations</span>
+<nav class="flex flex-col gap-1">
+<a aria-current="page" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors bg-indigo-50 text-indigo-700 font-medium font-sans text-sm shadow-sm" data-path="cases-workspaces" href="#">
+<span class="material-symbols-outlined text-[19px] text-indigo-600">inbox</span>
+<span>Cases / Workspaces</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors text-sm font-sans" data-path="new-incident" href="#">
+<span class="material-symbols-outlined text-[19px] text-slate-400">add_circle</span>
+<span>+ New Incident</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors text-sm font-sans" data-path="team-swarm-dispatch" href="#">
+<span class="material-symbols-outlined text-[19px] text-slate-400">groups</span>
+<span>Team Swarm &amp; Dispatch</span>
+</a>
+</nav>
+</div>
+<!-- Section: Insights & Assets -->
+<div class="flex flex-col gap-1.5">
+<span class="px-3 text-[11px] font-semibold text-slate-400 uppercase tracking-wider font-sans">Insights &amp; Assets</span>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors text-sm font-sans" data-path="executive-analytics" href="#">
+<span class="material-symbols-outlined text-[19px] text-slate-400">insights</span>
+<span>Executive Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors text-sm font-sans" data-path="knowledge-base" href="#">
+<span class="material-symbols-outlined text-[19px] text-slate-400">menu_book</span>
+<span>Knowledge Base</span>
+</a>
+</nav>
+</div>
+<!-- Section: Governance -->
+<div class="flex flex-col gap-1.5">
+<span class="px-3 text-[11px] font-semibold text-slate-400 uppercase tracking-wider font-sans">Governance</span>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors text-sm font-sans" data-path="system-health-sweeps" href="#">
+<span class="material-symbols-outlined text-[19px] text-slate-400">monitor_heart</span>
+<span>System Health &amp; Sweeps</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors text-sm font-sans" data-path="user-directory" href="#">
+<span class="material-symbols-outlined text-[19px] text-slate-400">badge</span>
+<span>User Directory</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors text-sm font-sans" data-path="security-audit-trail" href="#">
+<span class="material-symbols-outlined text-[19px] text-slate-400">policy</span>
+<span>Security Audit Trail</span>
+</a>
+</nav>
+</div>
+</div>
+</div>
+<!-- User Profile Footer -->
+<div class="p-4 border-t border-slate-100 bg-slate-50/60 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="w-9 h-9 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-sans font-semibold text-sm">
+            BO
+          </div>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-white"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-sans text-xs font-semibold text-slate-800">Bob Operator</span>
+<span class="font-sans text-[11px] text-slate-500">L2 Incident Engineer</span>
+</div>
+</div>
+<a class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-white transition-colors" data-path="logout" href="#" title="Logout">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Container -->
+<div class="pl-72">
+<!-- Header Bar -->
+<header class="fixed top-0 left-72 right-0 h-16 bg-white/90 backdrop-blur-md border-b border-slate-200 z-40 px-8 flex items-center justify-between">
+<!-- Search -->
+<div class="flex items-center gap-3 flex-1 max-w-lg">
+<div class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-slate-100/80 text-slate-400 w-full focus-within:bg-white focus-within:ring-2 focus-within:ring-indigo-200 transition-all border border-transparent focus-within:border-indigo-300">
+<span class="material-symbols-outlined text-slate-400 text-[18px]">search</span>
+<input class="bg-transparent text-slate-800 placeholder-slate-400 text-sm focus:outline-none w-full" placeholder="Search incidents, telemetry, alerts..." type="text"/>
+<kbd class="px-1.5 py-0.5 rounded bg-white text-slate-400 border border-slate-200 text-[10px] font-mono">Ctrl+K</kbd>
+</div>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-sans font-medium transition-colors">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span>Filter</span>
+</button>
+</div>
+<!-- Controls & Right Menu -->
+<div class="flex items-center gap-4">
+<!-- Live Scheduler Pulse -->
+<div class="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-mono">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span>APScheduler: Active</span>
+</div>
+<!-- Theme Selector Dropdown (Light Mode Active) -->
+<div class="relative flex items-center">
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-slate-700 text-xs font-sans">
+<span class="material-symbols-outlined text-[16px] text-amber-500">light_mode</span>
+<select aria-label="Theme Selector" class="bg-transparent text-xs font-medium text-slate-700 focus:outline-none cursor-pointer pr-1">
+<option selected="" value="light">Light Mode</option>
+<option value="pastel-dusk">Pastel Dusk</option>
+<option value="lavender-mist">Lavender Mist</option>
+</select>
+</div>
+</div>
+<!-- Notifications -->
+<button class="relative p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors" title="Notifications">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber-500"></span>
+</button>
+<!-- Role Select -->
+<div class="flex items-center gap-1.5 border border-slate-200 px-3 py-1.5 rounded-lg bg-white">
+<span class="material-symbols-outlined text-slate-400 text-[16px]">manage_accounts</span>
+<select aria-label="Active Role" class="bg-transparent text-slate-700 text-xs font-medium focus:outline-none cursor-pointer">
+<option selected="" value="operator">Operator</option>
+<option value="requester">Requester</option>
+<option value="team-lead">Team Lead</option>
+<option value="manager">Manager</option>
+<option value="administrator">Administrator</option>
+</select>
+</div>
+<!-- Avatar -->
+<div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-sans font-semibold">
+          BO
+        </div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="w-full pt-20 px-8 pb-16">
+<div class="flex flex-col gap-6 max-w-7xl mx-auto">
+<!-- Gentle Pastel Alert Banner: SLA Threat -->
+<div class="rounded-xl border border-amber-200/80 bg-gradient-to-r from-amber-50/90 via-orange-50/50 to-white p-4 shadow-sm">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+<div class="flex items-center gap-3.5 min-w-0">
+<div class="flex items-center justify-center w-10 h-10 rounded-xl bg-[#FED7AA]/60 text-amber-800 shrink-0">
+<span class="material-symbols-outlined text-[22px]">warning</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="text-[11px] font-mono uppercase px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-semibold tracking-wide">P1 Escalation Threat</span>
+<span class="text-slate-400 text-xs">• Immediate Triage Required</span>
+</div>
+<p class="font-sans text-sm font-semibold text-slate-800 mt-0.5 truncate">
+                  SLA Alert: 2 Cases in Tier 1 Support approaching resolution breach in &lt; 15 mins!
+                </p>
+</div>
+</div>
+<div class="flex items-center gap-2 self-end md:self-auto shrink-0">
+<button class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white border border-amber-300 hover:bg-amber-50 text-amber-900 text-xs font-medium transition-all shadow-sm" id="filterAtRiskBtn">
+<span class="material-symbols-outlined text-[16px]">filter_alt</span>
+<span>Filter At-Risk Cases</span>
+</button>
+<button class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+</div>
+<!-- 4 Spacious Metric Cards with Soft Pastel Pills -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+<!-- Card 1: My Open Cases (Lavender Accent) -->
+<div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow transition-shadow flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-slate-400 uppercase tracking-wider font-sans">Workload</span>
+<span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#FAF5FF] text-purple-700 border border-purple-100">L2 Queue</span>
+</div>
+<div class="mt-4 flex items-baseline justify-between">
+<div>
+<div class="text-3xl font-bold font-sans tracking-tight text-slate-900">5</div>
+<div class="text-xs text-slate-500 font-sans mt-1">My Open Cases</div>
+</div>
+<div class="w-11 h-11 rounded-xl bg-[#FAF5FF] text-purple-700 flex items-center justify-center border border-purple-100">
+<span class="material-symbols-outlined text-[22px]">folder_open</span>
+</div>
+</div>
+</div>
+<div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-sans">
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-purple-400"></span>3 In Assessment
+              </span>
+<span class="flex items-center gap-1.5 text-slate-500">
+<span class="w-2 h-2 rounded-full bg-slate-300"></span>2 Assigned
+              </span>
+</div>
+</div>
+<!-- Card 2: Response SLA Met (Pastel Sky Accent) -->
+<div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow transition-shadow flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-slate-400 uppercase tracking-wider font-sans">Quality Index</span>
+<span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#F0F9FF] text-sky-700 border border-sky-100">Target &gt;95%</span>
+</div>
+<div class="mt-4 flex items-baseline justify-between">
+<div>
+<div class="text-3xl font-bold font-sans tracking-tight text-slate-900">98.4<span class="text-lg font-normal text-slate-400">%</span></div>
+<div class="text-xs text-slate-500 font-sans mt-1">Response SLA Met</div>
+</div>
+<div class="w-11 h-11 rounded-xl bg-[#F0F9FF] text-sky-700 flex items-center justify-center border border-sky-100">
+<span class="material-symbols-outlined text-[22px]">verified</span>
+</div>
+</div>
+</div>
+<div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-sans">
+<span>Variance: <strong class="text-sky-800">+3.4%</strong> vs fleet</span>
+<span class="text-sky-700 font-medium bg-sky-50 px-2 py-0.5 rounded text-[11px]">Optimal</span>
+</div>
+</div>
+<!-- Card 3: Awaiting Requester (Warm Apricot Accent) -->
+<div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow transition-shadow flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-slate-400 uppercase tracking-wider font-sans">Blocked Threads</span>
+<span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#FFF7ED] text-orange-700 border border-orange-100">Auto-Nudge</span>
+</div>
+<div class="mt-4 flex items-baseline justify-between">
+<div>
+<div class="text-3xl font-bold font-sans tracking-tight text-slate-900">2</div>
+<div class="text-xs text-slate-500 font-sans mt-1">Awaiting Requester</div>
+</div>
+<div class="w-11 h-11 rounded-xl bg-[#FFF7ED] text-orange-700 flex items-center justify-center border border-orange-100">
+<span class="material-symbols-outlined text-[22px]">contact_support</span>
+</div>
+</div>
+</div>
+<div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-sans">
+<span>Auto-reminder: <strong class="text-slate-800">T-32m</strong></span>
+<span class="text-orange-700 font-medium bg-orange-50 px-2 py-0.5 rounded text-[11px]">Ping Active</span>
+</div>
+</div>
+<!-- Card 4: Resolved Today (Pastel Teal Accent) -->
+<div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow transition-shadow flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-slate-400 uppercase tracking-wider font-sans">Velocity</span>
+<span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#F0FDFA] text-teal-800 border border-teal-100">MTTR 2.4h</span>
+</div>
+<div class="mt-4 flex items-baseline justify-between">
+<div>
+<div class="text-3xl font-bold font-sans tracking-tight text-slate-900">8</div>
+<div class="text-xs text-slate-500 font-sans mt-1">Resolved Today</div>
+</div>
+<div class="w-11 h-11 rounded-xl bg-[#F0FDFA] text-teal-800 flex items-center justify-center border border-teal-100">
+<span class="material-symbols-outlined text-[22px]">task_alt</span>
+</div>
+</div>
+</div>
+<div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-sans">
+<span>Shift Target: <strong>10 cases</strong></span>
+<span class="text-teal-800 font-medium bg-teal-50 px-2 py-0.5 rounded text-[11px]">80% Met</span>
+</div>
+</div>
+</div>
+<!-- Telemetry Strip (Soft Muted Styling) -->
+<div class="rounded-xl bg-white border border-slate-200 p-4 shadow-sm flex flex-col lg:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-3.5 w-full lg:w-auto">
+<div class="w-9 h-9 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">monitoring</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-semibold text-slate-800 flex items-center gap-2 font-sans">
+                Active Swarm Throughput Telemetry
+                <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+</span>
+<span class="text-xs text-slate-500 font-sans">Incident volume steady. 0 network bottlenecks detected in L2 triage node.</span>
+</div>
+</div>
+<!-- Sparkline & Metrics -->
+<div class="flex items-center gap-6 w-full lg:w-auto justify-between lg:justify-end">
+<div class="flex items-center gap-2 text-xs font-mono">
+<span class="text-slate-400 uppercase">Flow Rate:</span>
+<span class="text-slate-700 font-semibold">1.4 req/s</span>
+</div>
+<svg class="h-6 w-40 text-sky-400 overflow-visible" fill="none" viewbox="0 0 170 30">
+<path d="M0 22 L20 18 L40 24 L60 12 L80 16 L100 8 L120 14 L140 4 L160 9 L170 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M0 22 L20 18 L40 24 L60 12 L80 16 L100 8 L120 14 L140 4 L160 9 L170 6 V30 H0 Z" fill="currentColor" fill-opacity="0.08"></path>
+<circle class="fill-sky-500" cx="170" cy="6" r="3"></circle>
+</svg>
+<div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-100 text-[11px] font-mono text-slate-600">
+<span class="material-symbols-outlined text-[13px] text-teal-600">memory</span>
+<span>Mem: 412MB</span>
+</div>
+</div>
+</div>
+<!-- Filter Tabs & Controls -->
+<div class="flex flex-col gap-3">
+<!-- Filter Tabs -->
+<div class="flex items-center gap-2 overflow-x-auto pb-1">
+<button class="queue-tab active px-3.5 py-2 rounded-lg text-xs font-medium font-sans bg-indigo-600 text-white shadow-sm transition-all whitespace-nowrap flex items-center gap-2">
+<span>All My Assigned</span>
+<span class="px-1.5 py-0.5 rounded-full bg-indigo-700 text-white text-[10px] font-mono">5</span>
+</button>
+<button class="queue-tab px-3.5 py-2 rounded-lg text-xs font-medium font-sans text-slate-600 hover:bg-slate-100 transition-all whitespace-nowrap flex items-center gap-2">
+<span>Team Unassigned</span>
+<span class="px-1.5 py-0.5 rounded-full bg-slate-200 text-slate-600 text-[10px] font-mono">4</span>
+</button>
+<button class="queue-tab px-3.5 py-2 rounded-lg text-xs font-medium font-sans text-amber-900 hover:bg-amber-100/80 bg-amber-50 border border-amber-200 transition-all whitespace-nowrap flex items-center gap-2">
+<span class="material-symbols-outlined text-[15px] text-amber-600">warning</span>
+<span>At-Risk SLA</span>
+<span class="px-1.5 py-0.5 rounded-full bg-amber-200 text-amber-900 text-[10px] font-mono font-bold">2</span>
+</button>
+<button class="queue-tab px-3.5 py-2 rounded-lg text-xs font-medium font-sans text-slate-600 hover:bg-slate-100 transition-all whitespace-nowrap flex items-center gap-2">
+<span>Awaiting Action</span>
+<span class="px-1.5 py-0.5 rounded-full bg-slate-200 text-slate-600 text-[10px] font-mono">3</span>
+</button>
+<button class="queue-tab px-3.5 py-2 rounded-lg text-xs font-medium font-sans text-slate-600 hover:bg-slate-100 transition-all whitespace-nowrap flex items-center gap-2">
+<span>Resolved</span>
+<span class="px-1.5 py-0.5 rounded-full bg-slate-200 text-slate-600 text-[10px] font-mono">14</span>
+</button>
+</div>
+<!-- Search & Filter Controls -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
+<div class="lg:col-span-6 relative flex items-center">
+<span class="material-symbols-outlined text-slate-400 absolute left-3.5 text-[18px] pointer-events-none">search</span>
+<input class="w-full pl-10 pr-12 py-2 rounded-lg bg-white border border-slate-200 text-slate-800 placeholder-slate-400 text-xs font-sans focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition-all shadow-sm" id="incidentSearch" placeholder="Filter by incident ID, requester, service, or keyword..." type="text"/>
+<span class="absolute right-3 text-[10px] font-mono text-slate-400 uppercase hidden sm:block">Press /</span>
+</div>
+<div class="lg:col-span-6 flex flex-wrap sm:flex-nowrap items-center justify-between lg:justify-end gap-2.5">
+<div class="flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-slate-400 text-[16px]">category</span>
+<select aria-label="Incident Category" class="bg-transparent text-slate-700 text-xs font-medium font-sans focus:outline-none cursor-pointer py-0.5">
+<option value="all">All Categories</option>
+<option value="network">Network</option>
+<option value="software">Software</option>
+<option value="hardware">Hardware</option>
+<option value="security">Security</option>
+</select>
+</div>
+<div class="flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-slate-400 text-[16px]">sort</span>
+<select aria-label="Sort Incidents" class="bg-transparent text-slate-700 text-xs font-medium font-sans focus:outline-none cursor-pointer py-0.5">
+<option value="sla-asc">Sort: SLA Urgent</option>
+<option value="prio-desc">Sort: Severity P1-P4</option>
+<option value="recent">Sort: Newest First</option>
+</select>
+</div>
+<button class="p-2 rounded-lg bg-white border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-colors shadow-sm" title="Refresh Workbench">
+<span class="material-symbols-outlined text-[16px]">refresh</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Incident Workload Data Grid -->
+<div class="rounded-xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50/80 border-b border-slate-200 text-slate-500 text-[11px] font-sans font-semibold uppercase tracking-wider">
+<th class="py-3.5 px-5 text-left">Incident ID</th>
+<th class="py-3.5 px-4 text-left">Severity</th>
+<th class="py-3.5 px-4 text-left">Title &amp; Requester</th>
+<th class="py-3.5 px-4 text-left">Service Domain</th>
+<th class="py-3.5 px-4 text-left">Status</th>
+<th class="py-3.5 px-4 text-left">Resolution SLA</th>
+<th class="py-3.5 px-4 text-left">AI Triage</th>
+<th class="py-3.5 px-5 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 text-xs font-sans" id="incidentTableBody">
+<!-- Row 1: INC-2026-000002 -->
+<tr class="hover:bg-slate-50/70 transition-colors">
+<td class="py-4 px-5 font-mono font-semibold text-indigo-700">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-rose-500"></span>
+<span>INC-2026-000002</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#FFE4E6] text-rose-800 border border-rose-200 inline-flex items-center gap-1.5">
+                      P1 CRITICAL
+                    </span>
+</td>
+<td class="py-4 px-4 max-w-sm">
+<div class="flex flex-col">
+<span class="font-medium text-slate-900 truncate">VPN Gateway Packet Loss &amp; SSO Latency</span>
+<div class="flex items-center gap-1.5 text-[11px] text-slate-500 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">account_circle</span>
+<span>Alice Requester</span>
+<span>•</span>
+<span class="text-slate-400">Finance Ops</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-100 text-slate-700">
+                      Network/VPN
+                    </span>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#FAF5FF] text-purple-700 border border-purple-100 flex items-center gap-1.5 w-max">
+<span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                      In Assessment
+                    </span>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col">
+<span class="px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-[#FFF7ED] text-orange-800 border border-orange-200 flex items-center gap-1 w-max">
+                        ⏳ 14m left
+                      </span>
+<span class="text-[10px] text-slate-400 mt-0.5">Breach target: 14:15 UTC</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-1.5 font-mono text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-teal-500"></span>
+<span class="text-teal-800 font-semibold">92%</span>
+<span class="text-slate-400 text-[10px]">High</span>
+</div>
+</td>
+<td class="py-4 px-5 text-right">
+<a class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-medium text-xs transition-colors" href="#">
+<span>Command</span>
+<span class="material-symbols-outlined text-[15px]">arrow_forward</span>
+</a>
+</td>
+</tr>
+<!-- Row 2: INC-2026-000007 -->
+<tr class="hover:bg-slate-50/70 transition-colors">
+<td class="py-4 px-5 font-mono font-medium text-slate-700">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-sky-400"></span>
+<span>INC-2026-000007</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#BAE6FD]/40 text-sky-800 border border-sky-200 inline-flex items-center gap-1.5">
+                      P2 HIGH
+                    </span>
+</td>
+<td class="py-4 px-4 max-w-sm">
+<div class="flex flex-col">
+<span class="font-medium text-slate-900 truncate">Production Database Connection Timeout</span>
+<div class="flex items-center gap-1.5 text-[11px] text-slate-500 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">account_circle</span>
+<span>David Dev</span>
+<span>•</span>
+<span class="text-slate-400">Platform Engineering</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-100 text-slate-700">
+                      Database / Aurora
+                    </span>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#F0F9FF] text-sky-700 border border-sky-100 flex items-center gap-1.5 w-max">
+<span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+                      Assigned
+                    </span>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col">
+<span class="px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-[#F0FDFA] text-teal-800 border border-teal-100 flex items-center gap-1 w-max">
+                        ⏳ 1h 40m left
+                      </span>
+<span class="text-[10px] text-slate-400 mt-0.5">Norm SLA margin</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-1.5 font-mono text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-teal-500"></span>
+<span class="text-teal-800 font-semibold">88%</span>
+<span class="text-slate-400 text-[10px]">High</span>
+</div>
+</td>
+<td class="py-4 px-5 text-right">
+<a class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs transition-colors" href="#">
+<span>Command</span>
+<span class="material-symbols-outlined text-[15px]">arrow_forward</span>
+</a>
+</td>
+</tr>
+<!-- Row 3: INC-2026-000011 -->
+<tr class="hover:bg-slate-50/70 transition-colors">
+<td class="py-4 px-5 font-mono font-medium text-slate-600">
+<span>INC-2026-000011</span>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200 inline-flex items-center">
+                      P3 MEDIUM
+                    </span>
+</td>
+<td class="py-4 px-4 max-w-sm">
+<div class="flex flex-col">
+<span class="font-medium text-slate-900 truncate">MacBook Pro M3 External Display Flicker</span>
+<div class="flex items-center gap-1.5 text-[11px] text-slate-500 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">account_circle</span>
+<span>Sarah Design</span>
+<span>•</span>
+<span class="text-slate-400">Product Design</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-100 text-slate-700">
+                      Hardware / Fleet
+                    </span>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 text-amber-800 border border-amber-100 flex items-center gap-1.5 w-max">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                      Awaiting Requester
+                    </span>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col">
+<span class="px-2 py-0.5 rounded text-[11px] font-mono text-slate-600 bg-slate-100 flex items-center gap-1 w-max">
+                        ⏳ 48h left
+                      </span>
+<span class="text-[10px] text-slate-400 mt-0.5">Clock paused</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-1.5 font-mono text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+<span class="text-slate-700 font-semibold">76%</span>
+<span class="text-slate-400 text-[10px]">Mod</span>
+</div>
+</td>
+<td class="py-4 px-5 text-right">
+<a class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-medium transition-colors" href="#">
+<span>View</span>
+<span class="material-symbols-outlined text-[15px]">visibility</span>
+</a>
+</td>
+</tr>
+<!-- Row 4: INC-2026-000015 -->
+<tr class="hover:bg-slate-50/70 transition-colors">
+<td class="py-4 px-5 font-mono font-medium text-slate-700">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-sky-400"></span>
+<span>INC-2026-000015</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#BAE6FD]/40 text-sky-800 border border-sky-200 inline-flex items-center gap-1.5">
+                      P2 HIGH
+                    </span>
+</td>
+<td class="py-4 px-4 max-w-sm">
+<div class="flex flex-col">
+<span class="font-medium text-slate-900 truncate">Salesforce Integration Webhook 500 Error</span>
+<div class="flex items-center gap-1.5 text-[11px] text-slate-500 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">account_circle</span>
+<span>Marketing Ops</span>
+<span>•</span>
+<span class="text-slate-400">Growth &amp; GTM</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-100 text-slate-700">
+                      Software / CRM
+                    </span>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#F0F9FF] text-sky-700 border border-sky-100 flex items-center gap-1.5 w-max">
+<span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+                      Assigned
+                    </span>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col">
+<span class="px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-[#F0FDFA] text-teal-800 border border-teal-100 flex items-center gap-1 w-max">
+                        ⏳ 2h 10m left
+                      </span>
+<span class="text-[10px] text-slate-400 mt-0.5">On Schedule</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-1.5 font-mono text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-teal-500"></span>
+<span class="text-teal-800 font-semibold">91%</span>
+<span class="text-slate-400 text-[10px]">High</span>
+</div>
+</td>
+<td class="py-4 px-5 text-right">
+<a class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs transition-colors" href="#">
+<span>Command</span>
+<span class="material-symbols-outlined text-[15px]">arrow_forward</span>
+</a>
+</td>
+</tr>
+<!-- Row 5: INC-2026-000018 -->
+<tr class="hover:bg-slate-50/70 transition-colors">
+<td class="py-4 px-5 font-mono font-medium text-slate-500">
+<span>INC-2026-000018</span>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200 inline-flex items-center">
+                      P4 LOW
+                    </span>
+</td>
+<td class="py-4 px-4 max-w-sm">
+<div class="flex flex-col">
+<span class="font-medium text-slate-900 truncate">Request for JetBrains All Products License</span>
+<div class="flex items-center gap-1.5 text-[11px] text-slate-500 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">account_circle</span>
+<span>Intern Sam</span>
+<span>•</span>
+<span class="text-slate-400">Engineering Co-op</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-100 text-slate-700">
+                      Service Request
+                    </span>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-600 flex items-center gap-1.5 w-max">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                      New
+                    </span>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col">
+<span class="px-2 py-0.5 rounded text-[11px] font-mono text-slate-500 bg-slate-100 flex items-center gap-1 w-max">
+                        ⏳ 96h left
+                      </span>
+<span class="text-[10px] text-slate-400 mt-0.5">Low priority pool</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-1.5 font-mono text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-teal-500"></span>
+<span class="text-teal-800 font-semibold">98%</span>
+<span class="text-slate-400 text-[10px]">High</span>
+</div>
+</td>
+<td class="py-4 px-5 text-right">
+<a class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-medium transition-colors" href="#">
+<span>Review</span>
+<span class="material-symbols-outlined text-[15px]">rate_review</span>
+</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Clean Pagination and Sweep Footer -->
+<div class="flex flex-col md:flex-row items-center justify-between gap-4 pt-1 text-xs font-sans">
+<!-- Counter & Page size -->
+<div class="flex items-center gap-4 text-slate-500">
+<span>Showing <strong class="text-slate-800 font-semibold">1–5</strong> of <strong class="text-slate-800 font-semibold">19</strong> cases</span>
+<div class="hidden sm:flex items-center gap-2">
+<span class="text-slate-400 font-mono">Rows:</span>
+<select class="bg-white border border-slate-200 text-slate-700 font-mono rounded px-2 py-1 text-xs focus:outline-none cursor-pointer">
+<option selected="" value="5">5</option>
+<option value="10">10</option>
+<option value="25">25</option>
+</select>
+</div>
+</div>
+<!-- Sweep status pill -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-slate-200 text-slate-500 font-mono text-[11px] shadow-sm">
+<span class="material-symbols-outlined text-[15px] text-teal-600">sync</span>
+<span>APScheduler Sweep:</span>
+<span class="text-slate-800 font-semibold">2m ago</span>
+<span class="text-slate-300">•</span>
+<span class="text-slate-500">(Next in 3m)</span>
+</div>
+<!-- Page Controls -->
+<div class="flex items-center gap-1">
+<button class="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-300 disabled:opacity-40 disabled:pointer-events-none" disabled="">
+<span class="material-symbols-outlined text-[16px]">first_page</span>
+</button>
+<button class="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-300 disabled:opacity-40 disabled:pointer-events-none" disabled="">
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</button>
+<div class="flex items-center gap-1 px-1">
+<button class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-mono font-medium flex items-center justify-center">1</button>
+<button class="w-7 h-7 rounded-lg hover:bg-slate-100 text-slate-600 font-mono flex items-center justify-center transition-colors">2</button>
+<button class="w-7 h-7 rounded-lg hover:bg-slate-100 text-slate-600 font-mono flex items-center justify-center transition-colors">3</button>
+<button class="w-7 h-7 rounded-lg hover:bg-slate-100 text-slate-600 font-mono flex items-center justify-center transition-colors">4</button>
+</div>
+<button class="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+<button class="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-[16px]">last_page</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabs = document.querySelectorAll('.queue-tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => {
+            t.classList.remove('bg-indigo-600', 'text-white', 'shadow-sm');
+            if (!t.classList.contains('border-amber-200')) {
+              t.classList.add('text-slate-600', 'hover:bg-slate-100');
+            }
+          });
+          tab.classList.remove('text-slate-600', 'hover:bg-slate-100');
+          tab.classList.add('bg-indigo-600', 'text-white', 'shadow-sm');
+        });
+      });
+
+      const filterBtn = document.getElementById('filterAtRiskBtn');
+      if (filterBtn) {
+        filterBtn.addEventListener('click', () => {
+          tabs.forEach(t => {
+            if (t.innerText.includes('At-Risk SLA')) {
+              t.click();
+            }
+          });
+        });
+      }
+
+      const searchInput = document.getElementById('incidentSearch');
+      const tableBody = document.getElementById('incidentTableBody');
+      if (searchInput && tableBody) {
+        searchInput.addEventListener('input', (e) => {
+          const query = e.target.value.toLowerCase();
+          const rows = tableBody.querySelectorAll('tr');
+          rows.forEach(row => {
+            const text = row.innerText.toLowerCase();
+            row.style.display = text.includes(query) ? '' : 'none';
+          });
+        });
+      }
+    });
+  </script>
+</body></html>
