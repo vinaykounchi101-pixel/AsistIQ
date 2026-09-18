@@ -40,8 +40,8 @@ class FakeCaseApiService extends CaseApiService {
     String? status,
     String? priority,
     String? assignedTo,
-    int skip = 0,
-    int limit = 50,
+    int page = 1,
+    int pageSize = 50,
   }) async {
     return [];
   }

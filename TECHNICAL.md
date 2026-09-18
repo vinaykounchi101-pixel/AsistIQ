@@ -112,9 +112,14 @@ All SLA calculations run 24/7 wall-clock time without business-hour pausing:
 ## 4. Flutter Client Implementation & Design System
 
 ### Design Tokens (`client/lib/shared/theme/`)
-* **Color Palette (`colors.dart`):** Stitch Nordic Light Pastel palette (`#F8FAFC` canvas, `#FFFFFF` cards, `#E2E8F0` borders, `#4F46E5` indigo primary, `#F5F3FF` lavender accents, `#ECFDF5` sage badge, `#FEF2F2` blush warning).
+* **Color Palette (`colors.dart`):** Stitch Nordic Light Palette (`#F8FAFC` canvas, `#FFFFFF` cards, `#E2E8F0` borders, `#4F46E5` solid indigo primary, `#F5F3FF` lavender accents, `#ECFDF5` sage badge, `#FEF2F2` blush warning, zero AI slope gradients).
 * **Typography (`typography.dart`):** `Plus Jakarta Sans` for titles and UI labels; `JetBrains Mono` for IDs, timestamps, SLA clocks, and tags.
-* **Layout Shell (`shell.dart`):** 260px desktop navigation sidebar with categorized sections (`OPERATIONS`, `INSIGHTS & ASSETS`, `GOVERNANCE`), real-time `Ctrl+K` search bar, APScheduler heartbeat badge, unread alert counter (`3`), and user profile status dot.
+* **Layout Shell (`shell.dart`):** Collapsible 260px / 68px desktop navigation sidebar with categorized sections (`OPERATIONS`, `INSIGHTS & ASSETS`, `GOVERNANCE`), real-time `Ctrl+K` search bar, APScheduler heartbeat badge, unread alert counter (`3`), and user profile status dot.
+
+### Windows Desktop Platform & Compilation
+* **Toolchain:** Visual Studio Build Tools 2022 (MSVC v143, Windows SDK 10/11, C++ ATL `Microsoft.VisualStudio.Component.VC.ATL`, CMake).
+* **Executable Output:** `client/build/windows/x64/runner/Debug/asistiq_client.exe`.
+* **Platform Channel Dependencies:** `flutter_secure_storage_windows` linking with ATL.
 
 ### Implemented Screen Directory
 1. `LoginScreen` — [login_screen.dart](file:///e:/Projects/AsistIQ/client/lib/features/auth/screens/login_screen.dart)

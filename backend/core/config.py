@@ -46,7 +46,7 @@ class Settings(BaseSettings):
 
     # Gemini AI
     GEMINI_API_KEY: str = Field(default="mock-gemini-key")
-    GEMINI_MODEL: str = Field(default="gemini-2.5-flash")
+    GEMINI_MODEL: str = Field(default="gemini-3.6-flash")
 
     # Supabase Storage
     SUPABASE_URL: str = Field(default="https://mock.supabase.co")
