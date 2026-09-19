@@ -116,10 +116,11 @@ All SLA calculations run 24/7 wall-clock time without business-hour pausing:
 * **Typography (`typography.dart`):** `Plus Jakarta Sans` for titles and UI labels; `JetBrains Mono` for IDs, timestamps, SLA clocks, and tags.
 * **Layout Shell (`shell.dart`):** Collapsible 260px / 68px desktop navigation sidebar with categorized sections (`OPERATIONS`, `INSIGHTS & ASSETS`, `GOVERNANCE`), real-time `Ctrl+K` search bar, APScheduler heartbeat badge, unread alert counter (`3`), and user profile status dot.
 
-### Windows Desktop Platform & Compilation
-* **Toolchain:** Visual Studio Build Tools 2022 (MSVC v143, Windows SDK 10/11, C++ ATL `Microsoft.VisualStudio.Component.VC.ATL`, CMake).
-* **Executable Output:** `client/build/windows/x64/runner/Debug/asistiq_client.exe`.
-* **Platform Channel Dependencies:** `flutter_secure_storage_windows` linking with ATL.
+### Windows & Android Multi-Platform Toolchain
+* **Windows Desktop Toolchain:** Visual Studio Build Tools 2022 (MSVC v143, Windows SDK 10/11, C++ ATL `Microsoft.VisualStudio.Component.VC.ATL`, CMake).
+* **Windows Executable:** `client/build/windows/x64/runner/Debug/asistiq_client.exe`.
+* **Android Mobile Toolchain:** Gradle 8.9 (`gradle-8.9-bin.zip`), Android NDK `27.0.12077973`, CMake `3.22.1`, Android SDK Platform 34.
+* **Device Bridge:** ADB Reverse (`adb reverse tcp:8000 tcp:8000`) enabling physical devices (e.g. Motorola edge 60 fusion) to communicate seamlessly with host backend services.
 
 ### Implemented Screen Directory
 1. `LoginScreen` — [login_screen.dart](file:///e:/Projects/AsistIQ/client/lib/features/auth/screens/login_screen.dart)
@@ -145,3 +146,5 @@ All SLA calculations run 24/7 wall-clock time without business-hour pausing:
   * Desktop sidebar & Mobile navigation strictly filter visible sections based on `UserRole` (`isStaff`, `isManagement`, `isAdmin`).
   * `ReportsScreen` (`/reports`) and backend endpoints `/api/v1/reports/*` strictly restricted to `Manager` and `Administrator`.
   * AI Copilot sidebar panel on `CaseDetailScreen` strictly restricted to staff roles to prevent Requester 403 API collisions.
+  * Interactive Modal Dialog & Floating SnackBar feedback on manual SLA Sweeps across Manager, Reports, and Admin screens.
+  * Zero-overflow responsive layout with compact AppBar adaptors for mobile screens.
