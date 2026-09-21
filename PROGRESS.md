@@ -2,7 +2,8 @@
 
 **Last Updated:** 2026-09-19 (End of Session 4 — Physical Android Deployment, SLA Sweep Enhancements & Mobile Responsive Hardening)  
 **Active Phase:** Phase 1 (College Project MVP)  
-**Current Active Branch:** `dev`
+**Current Active Branch:** `main`
+
 
 ---
 
