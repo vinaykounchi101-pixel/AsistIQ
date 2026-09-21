@@ -153,14 +153,18 @@ All SLA calculations run 24/7 wall-clock time without business-hour pausing:
 
 ## 6. Cloud Deployment & Standalone Distribution
 
-### Standalone Windows Setup Installer
-* **Inno Setup Script:** [`client/installer/asistiq_setup.iss`](file:///e:/Projects/AsistIQ/client/installer/asistiq_setup.iss)
-* **Compiler:** Inno Setup 6 Command-Line Compiler (`ISCC.exe`)
-* **Output Installer:** `e:\Projects\AsistIQ\dist\AsistIQ-Setup.exe` (~9.9 MB, LZMA2 solid compression).
-* **Features:** Full standalone runtime packaging (`flutter_windows.dll`, plugins, AOT bytecode, assets, uninstaller, desktop & start menu shortcuts).
+### Live Production Deployment
+* **Backend Web Service (Render):** `https://asistiq.onrender.com` (Health check: `GET /api/v1/health` -> `{"status": "ok", "db": "ok"}`).
+* **Relational Database (Supabase PostgreSQL):** 17 tables managed via Alembic migrations (`backend/db/migrations`).
+* **Object Storage (Supabase Storage):** `case-attachments` bucket for incident uploads; `app-releases` bucket for standalone binary downloads.
+
+### Standalone Production Release Binaries
+* **Windows Setup Installer:** [`e:\Projects\AsistIQ\dist\AsistIQ-Setup.exe`](file:///e:/Projects/AsistIQ/dist/AsistIQ-Setup.exe) (~9.9 MB, compiled with Inno Setup 6 `asistiq_setup.iss`, baked with `https://asistiq.onrender.com`).
+* **Android Release APK:** [`client/build/app/outputs/flutter-apk/app-release.apk`](file:///e:/Projects/AsistIQ/client/build/app/outputs/flutter-apk/app-release.apk) (22.4 MB, baked with `https://asistiq.onrender.com`).
+* **Flutter Web Production Bundle:** [`client/build/web/`](file:///e:/Projects/AsistIQ/client/build/web) (Vercel SPA rewrite with `vercel.json`).
 
 ### Cloud Deployment Blueprints
-* **Render (FastAPI Backend):** [`render.yaml`](file:///e:/Projects/AsistIQ/render.yaml) web service blueprint configured with Python 3, `requirements.txt`, and Uvicorn process runner.
+* **Render (FastAPI Backend):** [`render.yaml`](file:///e:/Projects/AsistIQ/render.yaml) & root [`Dockerfile`](file:///e:/Projects/AsistIQ/Dockerfile) container with dynamic port binding (`${PORT:-8000}`).
 * **Vercel (Flutter Web SPA):** [`vercel.json`](file:///e:/Projects/AsistIQ/vercel.json) rewrite rule routing all SPA client routes to `/index.html`.
-* **Supabase (PostgreSQL & Storage):** Relational persistence via `DATABASE_URL` and S3 object storage for case attachments and release binary hosting.
+
 
