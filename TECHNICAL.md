@@ -148,3 +148,19 @@ All SLA calculations run 24/7 wall-clock time without business-hour pausing:
   * AI Copilot sidebar panel on `CaseDetailScreen` strictly restricted to staff roles to prevent Requester 403 API collisions.
   * Interactive Modal Dialog & Floating SnackBar feedback on manual SLA Sweeps across Manager, Reports, and Admin screens.
   * Zero-overflow responsive layout with compact AppBar adaptors for mobile screens.
+
+---
+
+## 6. Cloud Deployment & Standalone Distribution
+
+### Standalone Windows Setup Installer
+* **Inno Setup Script:** [`client/installer/asistiq_setup.iss`](file:///e:/Projects/AsistIQ/client/installer/asistiq_setup.iss)
+* **Compiler:** Inno Setup 6 Command-Line Compiler (`ISCC.exe`)
+* **Output Installer:** `e:\Projects\AsistIQ\dist\AsistIQ-Setup.exe` (~9.9 MB, LZMA2 solid compression).
+* **Features:** Full standalone runtime packaging (`flutter_windows.dll`, plugins, AOT bytecode, assets, uninstaller, desktop & start menu shortcuts).
+
+### Cloud Deployment Blueprints
+* **Render (FastAPI Backend):** [`render.yaml`](file:///e:/Projects/AsistIQ/render.yaml) web service blueprint configured with Python 3, `requirements.txt`, and Uvicorn process runner.
+* **Vercel (Flutter Web SPA):** [`vercel.json`](file:///e:/Projects/AsistIQ/vercel.json) rewrite rule routing all SPA client routes to `/index.html`.
+* **Supabase (PostgreSQL & Storage):** Relational persistence via `DATABASE_URL` and S3 object storage for case attachments and release binary hosting.
+
