@@ -137,6 +137,11 @@ All SLA calculations run 24/7 wall-clock time without business-hour pausing:
 12. `ReportsScreen` (Executive Analytics) — [reports_screen.dart](file:///e:/Projects/AsistIQ/client/lib/features/reports/screens/reports_screen.dart)
 13. `NotificationDrawer` — [notification_drawer.dart](file:///e:/Projects/AsistIQ/client/lib/features/notifications/widgets/notification_drawer.dart)
 
+### App Releases & Cloud Binaries (`/api/v1/releases`)
+* `GET /api/v1/releases/windows` — Stream Windows installer `AsistIQ-Setup.exe` with `HTTP 307` Supabase Storage redirect or container binary fallback.
+* `GET /api/v1/releases/android` — Stream Android APK `app-release.apk` with `HTTP 307` Supabase Storage redirect or container binary fallback.
+* `GET /api/v1/releases/status` — Live diagnostics reporting availability of release binaries, root/backend paths, and Supabase bucket configuration.
+
 ---
 
 ## 5. Test Suite Verification & Security Posture
@@ -148,6 +153,11 @@ All SLA calculations run 24/7 wall-clock time without business-hour pausing:
   * AI Copilot sidebar panel on `CaseDetailScreen` strictly restricted to staff roles to prevent Requester 403 API collisions.
   * Interactive Modal Dialog & Floating SnackBar feedback on manual SLA Sweeps across Manager, Reports, and Admin screens.
   * Zero-overflow responsive layout with compact AppBar adaptors for mobile screens.
+* **CORS Security Posture:**
+  * Multi-domain regex in `backend/main.py`: `allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:[0-9]+)?|https://.*\.vercel\.app|https://.*\.onrender\.com"`.
+  * Supports local development, preview Vercel branch deployments, and production domains.
+* **Flutter 3.27+ Compatibility:**
+  * Clean `CardThemeData` migration across light and dark theme definitions in `client/lib/shared/theme/theme.dart`.
 
 ---
 
@@ -158,10 +168,10 @@ All SLA calculations run 24/7 wall-clock time without business-hour pausing:
 * **Relational Database (Supabase PostgreSQL):** 17 tables managed via Alembic migrations (`backend/db/migrations`).
 * **Object Storage (Supabase Storage):** `case-attachments` bucket for incident uploads; `app-releases` bucket for standalone binary downloads.
 
-### Standalone Production Release Binaries
-* **Windows Setup Installer:** [`e:\Projects\AsistIQ\dist\AsistIQ-Setup.exe`](file:///e:/Projects/AsistIQ/dist/AsistIQ-Setup.exe) (~9.9 MB, compiled with Inno Setup 6 `asistiq_setup.iss`, baked with `https://asistiq.onrender.com`).
-* **Android Release APK:** [`client/build/app/outputs/flutter-apk/app-release.apk`](file:///e:/Projects/AsistIQ/client/build/app/outputs/flutter-apk/app-release.apk) (22.4 MB, baked with `https://asistiq.onrender.com`).
-* **Flutter Web Production Bundle:** [`client/build/web/`](file:///e:/Projects/AsistIQ/client/build/web) (Vercel SPA rewrite with `vercel.json`).
+### Standalone Production Release Binaries & Branding
+* **Windows Setup Installer:** [`backend/releases/AsistIQ-Setup.exe`](file:///e:/Projects/AsistIQ/backend/releases/AsistIQ-Setup.exe) (~9.9 MB, compiled with Inno Setup 6 `asistiq_setup.iss`, embedded with custom Flowing Ribbon icon, baked with `https://asistiq.onrender.com`).
+* **Android Release APK:** [`backend/releases/app-release.apk`](file:///e:/Projects/AsistIQ/backend/releases/app-release.apk) (~22.4 MB, launcher mipmaps updated, baked with `https://asistiq.onrender.com`).
+* **Flutter Web Production Bundle:** [`client/build/web/`](file:///e:/Projects/AsistIQ/client/build/web) (PWA icons, favicon, and Vercel SPA rewrites via `vercel.json`).
 
 ### Cloud Deployment Blueprints
 * **Render (FastAPI Backend):** [`render.yaml`](file:///e:/Projects/AsistIQ/render.yaml) & root [`Dockerfile`](file:///e:/Projects/AsistIQ/Dockerfile) container with dynamic port binding (`${PORT:-8000}`).

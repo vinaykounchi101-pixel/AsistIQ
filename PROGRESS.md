@@ -27,20 +27,20 @@
 | **Sprint 12** | `feat/windows-desktop-responsive` | Visual Studio C++ toolchain integration (MSVC, ATL, CMake), native Windows desktop compilation (`asistiq_client.exe`), complete removal of gradient AI slope, full multi-viewport responsive layout fixes, and zero-overflow hardening across all 5 user role dashboards. | ✅ **Completed & Merged into `dev`** |
 | **Sprint 13** | `feat/physical-android-sla-fixes` | Gradle 8.9 & NDK 27.0.12077973 alignment, real-time physical device deployment over USB debugging (Motorola edge 60 fusion), PostgreSQL local daemon lifecycle recovery, AI staff partition safety gates, multi-platform interactive SLA sweep results dialog & SnackBar notifications, and mobile compact layout overflow zeroing across all views. | ✅ **Completed & Merged into `dev`** |
 | **Sprint 14** | `feat/windows-installer-cloud-configs` | Inno Setup configuration (`asistiq_setup.iss`), standalone compressed Windows setup wizard (`AsistIQ-Setup.exe`), multi-device Wi-Fi host-network distribution, Render deployment blueprint (`render.yaml`), and Vercel SPA routing (`vercel.json`). | ✅ **Completed & Merged into `main`** |
-
+| **Sprint 15** | `feat/branding-cors-installer-sync` | Custom Cyan & Deep Blue Flowing Ribbon branding across all platforms (Flutter assets, PWA icons, favicon, Windows `.ico`, Android mipmaps), login & app shell header badges, Flutter 3.27+ `CardThemeData` compatibility, Render CORS multi-domain regex (`*.vercel.app`), Inno Setup embedded icon recompilation, and dual-layer binary distribution (`backend/releases/` & Supabase Storage). | ✅ **Completed & Merged into `main`** |
 
 ---
 
 ## 🏆 Project Completion & Verification Summary
-* **Total Sprints:** 14 / 14 Complete (100%)
+* **Total Sprints:** 15 / 15 Complete (100%)
 * **Backend Test Suite:** 37 / 37 automated tests passing (100% pass rate)
 * **Frontend Test Suite:** 20 / 20 test suites passing (100% pass rate)
 * **Platforms Supported & Tested:** 
   - Android Mobile (Native APK executed on physical Motorola edge 60 fusion over USB debugging)
-  - Windows Desktop (Native `asistiq_client.exe` & Standalone `AsistIQ-Setup.exe` installer)
-  - Web (Chrome / Edge / Firefox / Vercel SPA)
+  - Windows Desktop (Native `asistiq_client.exe` & Standalone `AsistIQ-Setup.exe` installer with custom embedded icon)
+  - Web (Chrome / Edge / Firefox / Vercel SPA with live CORS connectivity)
   - Adaptive Layout (Phone portrait, Tablet, Desktop 1920x1080)
-* **UI/UX Standard:** Clean Nordic Solid Palette (Zero AI slope gradients, anti-aliased uniform card borders, 100% responsive Bento metric grids, zero horizontal/vertical flex clipping).
+* **UI/UX Standard:** Clean Nordic Solid Palette & Flowing Ribbon Identity (Zero AI slope gradients, anti-aliased uniform card borders, 100% responsive Bento metric grids, zero horizontal/vertical flex clipping).
 * **Security & RBAC Hardening:** Dynamic role-based navigation filtering in `AppShell`, strict `/reports` gating for Management, and requester partition on AI endpoints.
 * **Database & Schema:** Alembic managed schema (`asistiq_db`) with 17 PostgreSQL tables and idempotent demo seeder (12 multi-state incidents).
 
