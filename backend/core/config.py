@@ -6,12 +6,38 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 _BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 _ROOT_DIR = os.path.dirname(_BACKEND_DIR)
 
-_ENV_FILES = (
-    os.path.join(_BACKEND_DIR, ".env"),
-    os.path.join(_ROOT_DIR, ".env"),
-    ".env",
-    "backend/.env",
-)
+_CUSTOM_ENV = os.environ.get("ENV_FILE")
+_ENV_TYPE = os.environ.get("ENVIRONMENT", "local")
+
+if _CUSTOM_ENV:
+    _CANDIDATES = [
+        _CUSTOM_ENV,
+        os.path.join(_BACKEND_DIR, _CUSTOM_ENV),
+        os.path.join(_ROOT_DIR, _CUSTOM_ENV),
+        os.path.join(_BACKEND_DIR, f"{_CUSTOM_ENV}.txt"),
+        os.path.join(_BACKEND_DIR, ".env.prod.txt"),
+    ]
+elif _ENV_TYPE in ("production", "staging"):
+    _CANDIDATES = [
+        os.path.join(_BACKEND_DIR, ".env.prod"),
+        os.path.join(_BACKEND_DIR, ".env.prod.txt"),
+        os.path.join(_ROOT_DIR, ".env.prod"),
+        os.path.join(_ROOT_DIR, ".env.prod.txt"),
+    ]
+else:
+    _CANDIDATES = []
+
+_MATCHED_CUSTOM = next((p for p in _CANDIDATES if p and os.path.exists(p)), None)
+
+if _MATCHED_CUSTOM:
+    _ENV_FILES = (_MATCHED_CUSTOM,)
+else:
+    _ENV_FILES = (
+        os.path.join(_BACKEND_DIR, ".env"),
+        os.path.join(_ROOT_DIR, ".env"),
+        ".env",
+        "backend/.env",
+    )
 
 
 class Settings(BaseSettings):
@@ -32,6 +58,13 @@ class Settings(BaseSettings):
 
     # Database
     DATABASE_URL: str = Field(default="postgresql://postgres:postgres@localhost:5432/asistiq_db")
+
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def normalize_database_url(cls, v: Optional[str]) -> Optional[str]:
+        if isinstance(v, str) and v.startswith("postgres://"):
+            return v.replace("postgres://", "postgresql://", 1)
+        return v
 
     # JWT Authentication
     JWT_SECRET_KEY: str = Field(default="change-this-to-a-secure-random-32-plus-character-secret-key")
