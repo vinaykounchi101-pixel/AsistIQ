@@ -51,6 +51,19 @@ class Settings(BaseSettings):
 
     # Core Environment
     ENVIRONMENT: Literal["local", "staging", "production"] = "local"
+
+    @field_validator("ENVIRONMENT", mode="before")
+    @classmethod
+    def normalize_environment(cls, v: Optional[str]) -> str:
+        if isinstance(v, str):
+            val = v.strip().lower()
+            if val in ("prod", "production"):
+                return "production"
+            if val in ("stage", "staging"):
+                return "staging"
+            if val in ("dev", "local", "development"):
+                return "local"
+        return v or "local"
     APP_NAME: str = "AsistIQ"
     API_V1_PREFIX: str = "/api/v1"
     PORT: int = 8000
