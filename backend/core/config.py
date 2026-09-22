@@ -98,6 +98,7 @@ class Settings(BaseSettings):
     SUPABASE_URL: str = Field(default="https://mock.supabase.co")
     SUPABASE_KEY: str = Field(default="mock-supabase-key")
     SUPABASE_STORAGE_BUCKET: str = "case-attachments"
+    SUPABASE_RELEASES_BUCKET: str = "app-releases"
 
     # CORS
     ALLOWED_ORIGINS: str = "http://localhost:3000,http://127.0.0.1:3000,http://localhost:8000,http://127.0.0.1:8000,http://localhost:8080,http://127.0.0.1:8080"

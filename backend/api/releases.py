@@ -20,8 +20,16 @@ ANDROID_PATHS = [
 @router.get("/android")
 def get_android_release():
     """
-    Serves the Android APK release binary directly from the server repository or Supabase storage.
+    Redirects to Supabase Storage public URL for the Android APK, or serves local file as fallback.
     """
+    supabase_url = settings.SUPABASE_URL.rstrip("/")
+    bucket = getattr(settings, "SUPABASE_RELEASES_BUCKET", "app-releases")
+    if supabase_url and not supabase_url.startswith("https://mock"):
+        return RedirectResponse(
+            url=f"{supabase_url}/storage/v1/object/public/{bucket}/app-release.apk",
+            status_code=status.HTTP_307_TEMPORARY_REDIRECT
+        )
+    
     for apk_path in ANDROID_PATHS:
         if apk_path.exists():
             return FileResponse(
@@ -30,21 +38,22 @@ def get_android_release():
                 media_type="application/vnd.android.package-archive"
             )
     
-    supabase_url = settings.SUPABASE_URL.rstrip("/")
-    if supabase_url and not supabase_url.startswith("https://mock"):
-        return RedirectResponse(
-            url=f"{supabase_url}/storage/v1/object/public/app-releases/app-release.apk",
-            status_code=status.HTTP_307_TEMPORARY_REDIRECT
-        )
-    
     raise HTTPException(status_code=404, detail="Android APK release binary not found")
 
 
 @router.get("/windows")
 def get_windows_release():
     """
-    Serves the Windows installer release binary directly from the server repository or Supabase storage.
+    Redirects to Supabase Storage public URL for the Windows Installer, or serves local file as fallback.
     """
+    supabase_url = settings.SUPABASE_URL.rstrip("/")
+    bucket = getattr(settings, "SUPABASE_RELEASES_BUCKET", "app-releases")
+    if supabase_url and not supabase_url.startswith("https://mock"):
+        return RedirectResponse(
+            url=f"{supabase_url}/storage/v1/object/public/{bucket}/AsistIQ-Setup.exe",
+            status_code=status.HTTP_307_TEMPORARY_REDIRECT
+        )
+    
     for win_path in WINDOWS_PATHS:
         if win_path.exists():
             return FileResponse(
@@ -52,12 +61,5 @@ def get_windows_release():
                 filename="AsistIQ-Setup.exe",
                 media_type="application/octet-stream"
             )
-    
-    supabase_url = settings.SUPABASE_URL.rstrip("/")
-    if supabase_url and not supabase_url.startswith("https://mock"):
-        return RedirectResponse(
-            url=f"{supabase_url}/storage/v1/object/public/app-releases/AsistIQ-Setup.exe",
-            status_code=status.HTTP_307_TEMPORARY_REDIRECT
-        )
     
     raise HTTPException(status_code=404, detail="Windows installer release binary not found")
