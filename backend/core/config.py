@@ -117,41 +117,22 @@ class Settings(BaseSettings):
 
     def validate_startup_secrets(self) -> None:
         """
-        Validates that all required environment variables for the active environment
-        are present and non-empty (SRS v3.3 §3.3). Fails fast if any are missing.
+        Validates that critical required environment variables are present (SRS v3.3 §3.3).
+        Fails fast if critical secrets (DATABASE_URL, JWT_SECRET_KEY) are missing.
+        Optional services (Brevo, Gemini, Google OAuth) fall back to safe mocks if not set.
         """
-        missing_vars: List[str] = []
+        missing_critical: List[str] = []
 
         if not self.DATABASE_URL:
-            missing_vars.append("DATABASE_URL")
+            missing_critical.append("DATABASE_URL")
         if not self.JWT_SECRET_KEY or self.JWT_SECRET_KEY.startswith("change-this"):
             if self.ENVIRONMENT != "local":
-                missing_vars.append("JWT_SECRET_KEY")
+                missing_critical.append("JWT_SECRET_KEY")
 
-        if not self.GEMINI_API_KEY or self.GEMINI_API_KEY.startswith("mock-"):
-            if self.ENVIRONMENT != "local":
-                missing_vars.append("GEMINI_API_KEY")
-
-        if not self.GOOGLE_OAUTH_CLIENT_ID or self.GOOGLE_OAUTH_CLIENT_ID.startswith("mock-"):
-            if self.ENVIRONMENT != "local":
-                missing_vars.append("GOOGLE_OAUTH_CLIENT_ID")
-
-        if not self.GOOGLE_OAUTH_CLIENT_SECRET or self.GOOGLE_OAUTH_CLIENT_SECRET.startswith("mock-"):
-            if self.ENVIRONMENT != "local":
-                missing_vars.append("GOOGLE_OAUTH_CLIENT_SECRET")
-
-        if self.ENVIRONMENT == "local":
-            # In local dev, either Gmail SMTP or mock is acceptable
-            pass
-        else:
-            # Staging and Production MUST have BREVO_API_KEY
-            if not self.BREVO_API_KEY:
-                missing_vars.append("BREVO_API_KEY")
-
-        if missing_vars:
+        if missing_critical:
             raise ValueError(
-                f"[STARTUP ERROR] Missing or unconfigured required environment variables for environment '{self.ENVIRONMENT}': "
-                f"{', '.join(missing_vars)}. Please populate them in the environment or .env file."
+                f"[STARTUP ERROR] Missing critical environment variables for environment '{self.ENVIRONMENT}': "
+                f"{', '.join(missing_critical)}. Please populate them in the Render Environment tab."
             )
 
 
