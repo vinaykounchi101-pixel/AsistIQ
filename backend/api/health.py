@@ -18,8 +18,9 @@ def health_check(db: Session = Depends(get_db)):
         db.execute(text("SELECT 1"))
     except Exception as e:
         db_status = "error"
-        # Sanitize and extract high-level error reason without exposing secrets
-        db_error = str(e).splitlines()[-1] if str(e).splitlines() else str(e)
+        # Extract meaningful error line without secrets
+        lines = [line.strip() for line in str(e).splitlines() if line.strip() and not line.startswith("(Background on")]
+        db_error = lines[0] if lines else str(e)
 
     response = {
         "status": "ok" if db_status == "ok" else "degraded",
