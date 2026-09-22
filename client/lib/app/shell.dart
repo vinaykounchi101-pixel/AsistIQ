@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../features/auth/state/auth_notifier.dart';
 import '../features/notifications/widgets/notification_drawer.dart';
+import '../shared/api/api_client.dart';
 import '../shared/theme/colors.dart';
 import '../shared/theme/spacing.dart';
 
@@ -375,6 +377,7 @@ class AppShell extends ConsumerWidget {
             ],
           ),
           actions: [
+            _buildDownloadAppsMenu(context),
             Builder(
               builder: (ctx) => IconButton(
                 icon: const Badge(
@@ -540,6 +543,10 @@ class AppShell extends ConsumerWidget {
                         const SizedBox(width: AppSpacing.sm),
                       ],
 
+                      // Download Apps Dropdown Menu
+                      _buildDownloadAppsMenu(context),
+                      const SizedBox(width: AppSpacing.xs),
+
                       // Notifications Icon
                       Builder(
                         builder: (ctx) => IconButton(
@@ -588,6 +595,52 @@ class AppShell extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildDownloadAppsMenu(BuildContext context) {
+    final baseUrl = ApiClient.defaultBaseUrl.replaceAll(RegExp(r'/api/v1/?$'), '');
+    final androidUrl = '$baseUrl/api/v1/releases/android';
+    final windowsUrl = '$baseUrl/api/v1/releases/windows';
+
+    return PopupMenuButton<String>(
+      tooltip: 'Download Desktop & Mobile Apps',
+      icon: const Icon(Icons.download_for_offline_outlined, color: Color(0xFF475569)),
+      onSelected: (val) async {
+        final urlString = val == 'android' ? androidUrl : windowsUrl;
+        final uri = Uri.parse(urlString);
+        if (await canLaunchUrl(uri)) {
+          await launchUrl(uri, mode: LaunchMode.externalApplication);
+        } else {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Could not launch download URL: $urlString')),
+            );
+          }
+        }
+      },
+      itemBuilder: (ctx) => [
+        const PopupMenuItem(
+          value: 'windows',
+          child: Row(
+            children: [
+              Icon(Icons.desktop_windows, size: 18, color: Color(0xFF4F46E5)),
+              SizedBox(width: 10),
+              Text('Windows Setup (.exe)', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
+            ],
+          ),
+        ),
+        const PopupMenuItem(
+          value: 'android',
+          child: Row(
+            children: [
+              Icon(Icons.android, size: 18, color: Color(0xFF10B981)),
+              SizedBox(width: 10),
+              Text('Android APK (.apk)', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

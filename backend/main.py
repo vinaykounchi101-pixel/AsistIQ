@@ -12,6 +12,7 @@ from backend.api.messages.routes import router as messages_router
 from backend.api.ai.routes import router as ai_router
 from backend.api.admin.routes import router as admin_router
 from backend.api.reports.routes import router as reports_router
+from backend.api.releases import router as releases_router
 from backend.scheduler.scheduler import start_scheduler, shutdown_scheduler
 
 
@@ -60,6 +61,7 @@ app.include_router(messages_router, prefix=settings.API_V1_PREFIX)
 app.include_router(ai_router, prefix=settings.API_V1_PREFIX)
 app.include_router(admin_router, prefix=settings.API_V1_PREFIX)
 app.include_router(reports_router, prefix=settings.API_V1_PREFIX)
+app.include_router(releases_router, prefix=settings.API_V1_PREFIX)
 
 # Stitch UI Direct Web Serving Routes
 STITCH_DIR = Path(__file__).resolve().parent.parent / "stitch_asistiq_incident_management_platform"
