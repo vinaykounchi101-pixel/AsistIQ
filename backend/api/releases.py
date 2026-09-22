@@ -38,6 +38,20 @@ def get_releases_status():
     apk_bin = _find_binary("app-release.apk")
     supabase_configured = bool(settings.SUPABASE_URL and not settings.SUPABASE_URL.startswith("https://mock"))
 
+    releases_dir = ROOT_DIR / "releases"
+    releases_contents = []
+    if releases_dir.exists():
+        try:
+            releases_contents = [f.name for f in releases_dir.iterdir()]
+        except Exception as e:
+            releases_contents = [f"error: {e}"]
+
+    root_contents = []
+    try:
+        root_contents = [f.name for f in ROOT_DIR.iterdir()]
+    except Exception as e:
+        root_contents = [f"error: {e}"]
+
     return {
         "windows_installer_present": win_bin is not None,
         "windows_installer_path": str(win_bin) if win_bin else None,
@@ -47,6 +61,8 @@ def get_releases_status():
         "supabase_bucket": getattr(settings, "SUPABASE_RELEASES_BUCKET", "app-releases"),
         "cwd": str(Path.cwd()),
         "root_dir": str(ROOT_DIR),
+        "root_contents": root_contents,
+        "releases_contents": releases_contents,
     }
 
 
