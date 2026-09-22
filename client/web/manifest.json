@@ -1,11 +1,11 @@
 {
-    "name": "asistiq_client",
-    "short_name": "asistiq_client",
+    "name": "AsistIQ AI Helpdesk",
+    "short_name": "AsistIQ",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#0F172A",
+    "theme_color": "#4F46E5",
+    "description": "AI-Assisted IT Helpdesk & SLA Automation Engine.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

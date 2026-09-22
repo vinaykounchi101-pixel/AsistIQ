@@ -20,7 +20,7 @@ class AppTheme {
         onError: Colors.white,
       ),
       textTheme: AppTypography.textThemeDark,
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: AppColors.cardDark,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -123,7 +123,7 @@ class AppTheme {
         onError: Colors.white,
       ),
       textTheme: AppTypography.textThemeLight,
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: AppColors.cardLight,
         elevation: 0,
         shape: RoundedRectangleBorder(

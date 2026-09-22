@@ -104,11 +104,12 @@ class AppShell extends ConsumerWidget {
                     width: 32,
                     height: 32,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF4F46E5),
+                      color: const Color(0xFF0F172A),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Center(
-                      child: Icon(Icons.bolt, color: Colors.white, size: 20),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset('assets/images/logo.png', fit: BoxFit.cover),
                     ),
                   ),
                   const SizedBox(width: AppSpacing.sm),
@@ -350,11 +351,12 @@ class AppShell extends ConsumerWidget {
                 width: 28,
                 height: 28,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF4F46E5),
+                  color: const Color(0xFF0F172A),
                   borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
                 ),
-                child: const Center(
-                  child: Icon(Icons.bolt, color: Colors.white, size: 18),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                  child: Image.asset('assets/images/logo.png', fit: BoxFit.cover),
                 ),
               ),
               const SizedBox(width: AppSpacing.sm),
@@ -665,11 +667,12 @@ class AppShell extends ConsumerWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: const Color(0xFF4F46E5),
+              color: const Color(0xFF0F172A),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Center(
-              child: Icon(Icons.bolt, color: Colors.white, size: 22),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset('assets/images/logo.png', fit: BoxFit.cover),
             ),
           ),
         ),
