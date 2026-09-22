@@ -13,12 +13,18 @@ def health_check(db: Session = Depends(get_db)):
     Verifies database connectivity without calling external AI providers.
     """
     db_status = "ok"
+    db_error = None
     try:
         db.execute(text("SELECT 1"))
-    except Exception:
+    except Exception as e:
         db_status = "error"
+        # Sanitize and extract high-level error reason without exposing secrets
+        db_error = str(e).splitlines()[-1] if str(e).splitlines() else str(e)
 
-    return {
+    response = {
         "status": "ok" if db_status == "ok" else "degraded",
         "db": db_status
     }
+    if db_error:
+        response["db_error"] = db_error
+    return response
