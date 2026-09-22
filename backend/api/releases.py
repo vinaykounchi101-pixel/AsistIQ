@@ -11,12 +11,17 @@ ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 def _find_binary(filename: str) -> Optional[Path]:
+    backend_dir = Path(__file__).resolve().parent.parent
     candidates = [
+        backend_dir / "releases" / filename,
+        ROOT_DIR / "backend" / "releases" / filename,
         ROOT_DIR / "releases" / filename,
         ROOT_DIR / "dist" / filename,
+        Path.cwd() / "backend" / "releases" / filename,
         Path.cwd() / "releases" / filename,
-        Path.cwd() / "dist" / filename,
+        Path("/app/backend/releases") / filename,
         Path("/app/releases") / filename,
+        Path("backend/releases") / filename,
         Path("releases") / filename,
         Path(filename),
     ]
