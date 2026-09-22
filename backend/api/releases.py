@@ -6,21 +6,29 @@ from backend.core.config import settings
 router = APIRouter(prefix="/releases", tags=["App Releases"])
 
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
-WINDOWS_LOCAL = ROOT_DIR / "dist" / "AsistIQ-Setup.exe"
-ANDROID_LOCAL = ROOT_DIR / "client" / "build" / "app" / "outputs" / "flutter-apk" / "app-release.apk"
+RELEASES_DIR = ROOT_DIR / "releases"
+WINDOWS_PATHS = [
+    RELEASES_DIR / "AsistIQ-Setup.exe",
+    ROOT_DIR / "dist" / "AsistIQ-Setup.exe",
+]
+ANDROID_PATHS = [
+    RELEASES_DIR / "app-release.apk",
+    ROOT_DIR / "client" / "build" / "app" / "outputs" / "flutter-apk" / "app-release.apk",
+]
 
 
 @router.get("/android")
 def get_android_release():
     """
-    Serves the local Android APK if present; otherwise redirects to Supabase storage.
+    Serves the Android APK release binary directly from the server repository or Supabase storage.
     """
-    if ANDROID_LOCAL.exists():
-        return FileResponse(
-            path=str(ANDROID_LOCAL),
-            filename="app-release.apk",
-            media_type="application/vnd.android.package-archive"
-        )
+    for apk_path in ANDROID_PATHS:
+        if apk_path.exists():
+            return FileResponse(
+                path=str(apk_path),
+                filename="AsistIQ-app-release.apk",
+                media_type="application/vnd.android.package-archive"
+            )
     
     supabase_url = settings.SUPABASE_URL.rstrip("/")
     if supabase_url and not supabase_url.startswith("https://mock"):
@@ -35,14 +43,15 @@ def get_android_release():
 @router.get("/windows")
 def get_windows_release():
     """
-    Serves the local Windows Installer if present; otherwise redirects to Supabase storage.
+    Serves the Windows installer release binary directly from the server repository or Supabase storage.
     """
-    if WINDOWS_LOCAL.exists():
-        return FileResponse(
-            path=str(WINDOWS_LOCAL),
-            filename="AsistIQ-Setup.exe",
-            media_type="application/octet-stream"
-        )
+    for win_path in WINDOWS_PATHS:
+        if win_path.exists():
+            return FileResponse(
+                path=str(win_path),
+                filename="AsistIQ-Setup.exe",
+                media_type="application/octet-stream"
+            )
     
     supabase_url = settings.SUPABASE_URL.rstrip("/")
     if supabase_url and not supabase_url.startswith("https://mock"):
