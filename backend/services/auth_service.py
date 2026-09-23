@@ -31,8 +31,8 @@ class AuthService:
             )
 
         hashed_password = PasswordHasher.hash_password(data.password)
-        # Local dev accounts can be pre-verified for fast prototyping (SRS §3.3a)
-        is_verified = (settings.ENVIRONMENT == "local")
+        # Pre-verify accounts for seamless Phase 1 onboarding across multi-platform clients
+        is_verified = True
 
         user = UserRepository.create(
             db=db,

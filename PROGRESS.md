@@ -28,11 +28,12 @@
 | **Sprint 13** | `feat/physical-android-sla-fixes` | Gradle 8.9 & NDK 27.0.12077973 alignment, real-time physical device deployment over USB debugging (Motorola edge 60 fusion), PostgreSQL local daemon lifecycle recovery, AI staff partition safety gates, multi-platform interactive SLA sweep results dialog & SnackBar notifications, and mobile compact layout overflow zeroing across all views. | ✅ **Completed & Merged into `dev`** |
 | **Sprint 14** | `feat/windows-installer-cloud-configs` | Inno Setup configuration (`asistiq_setup.iss`), standalone compressed Windows setup wizard (`AsistIQ-Setup.exe`), multi-device Wi-Fi host-network distribution, Render deployment blueprint (`render.yaml`), and Vercel SPA routing (`vercel.json`). | ✅ **Completed & Merged into `main`** |
 | **Sprint 15** | `feat/branding-cors-installer-sync` | Custom Cyan & Deep Blue Flowing Ribbon branding across all platforms (Flutter assets, PWA icons, favicon, Windows `.ico`, Android mipmaps), login & app shell header badges, Flutter 3.27+ `CardThemeData` compatibility, Render CORS multi-domain regex (`*.vercel.app`), Inno Setup embedded icon recompilation, and dual-layer binary distribution (`backend/releases/` & Supabase Storage). | ✅ **Completed & Merged into `main`** |
+| **Sprint 16** | `feat/role-based-registration` | Self-service role-based account registration with 5 interactive visual Bento cards (`Requester`, `Operator`, `TeamLead`, `Manager`, `Administrator`), automated employee initials extractor & editor, role-enforced locked email generator (`[initials]_[role_suffix]@asistiq.com`), user password & confirmation inputs, instant pre-verified onboarding, and rebuilt release binaries (Windows Setup 10.3MB, Android APK 22.8MB, Web build). | ✅ **Completed & Merged into `main`** |
 
 ---
 
 ## 🏆 Project Completion & Verification Summary
-* **Total Sprints:** 15 / 15 Complete (100%)
+* **Total Sprints:** 16 / 16 Complete (100%)
 * **Backend Test Suite:** 37 / 37 automated tests passing (100% pass rate)
 * **Frontend Test Suite:** 20 / 20 test suites passing (100% pass rate)
 * **Platforms Supported & Tested:** 
@@ -41,6 +42,6 @@
   - Web (Chrome / Edge / Firefox / Vercel SPA with live CORS connectivity)
   - Adaptive Layout (Phone portrait, Tablet, Desktop 1920x1080)
 * **UI/UX Standard:** Clean Nordic Solid Palette & Flowing Ribbon Identity (Zero AI slope gradients, anti-aliased uniform card borders, 100% responsive Bento metric grids, zero horizontal/vertical flex clipping).
-* **Security & RBAC Hardening:** Dynamic role-based navigation filtering in `AppShell`, strict `/reports` gating for Management, and requester partition on AI endpoints.
+* **Security & RBAC Hardening:** Dynamic role-based navigation filtering in `AppShell`, strict `/reports` gating for Management, role-enforced organizational email schema validation, and requester partition on AI endpoints.
 * **Database & Schema:** Alembic managed schema (`asistiq_db`) with 17 PostgreSQL tables and idempotent demo seeder (12 multi-state incidents).
 

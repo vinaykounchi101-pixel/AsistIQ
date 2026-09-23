@@ -255,10 +255,12 @@ def test_gemini_provider_fallback():
 
 # --- 5. AI API Endpoints Route Tests ---
 
-def test_ai_api_endpoints_flow(db_session, test_users, test_case):
+def test_ai_api_endpoints_flow(db_session, test_users, test_case, monkeypatch):
     from fastapi.testclient import TestClient
     from backend.main import app
     from backend.api.deps import get_db, get_current_user
+
+    monkeypatch.setattr("backend.services.ai_service.get_ai_provider", lambda: MockAIProvider())
 
     op_id = test_users["operator"].id
     req_id = test_users["requester"].id

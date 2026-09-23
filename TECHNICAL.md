@@ -35,6 +35,12 @@ PostgreSQL Database (Supabase / Local)    <-- Relational persistence, Alembic mi
 
 ### Authentication & RBAC Engine
 * **Dual Auth:** Password + Argon2id/bcrypt and Google OAuth 2.0 / OIDC.
+* **Role-Based Registration (Sprint 16):**
+  * Self-service onboarding with 5 interactive visual Bento cards (`Requester`, `Operator`, `TeamLead`, `Manager`, `Administrator`).
+  * Automated employee initials extractor with manual editing support.
+  * Role-enforced organizational email schema: `[initials]_[role_suffix]@asistiq.com` (`_requester`, `_operator`, `_lead`, `_manager`, `_admin`).
+  * User-created password with 8+ character validation and confirmation match check.
+  * Pre-verified account initialization for immediate dashboard entry across multi-platform clients.
 * **Anti-Takeover Policy (SRS §7.4):** Google sign-in colliding with an existing password account returns `409 Conflict` (`AUTH_PROVIDER_CONFLICT`).
 * **Tokens:**
   * Access Token: 15 minutes (prod) / 24 hours (local dev default).

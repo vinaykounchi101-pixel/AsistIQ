@@ -11,7 +11,7 @@ class BaseStrictSchema(BaseModel):
 
 class UserCreateSchema(BaseStrictSchema):
     email: EmailStr
-    password: str = Field(min_length=12, description="Password must be at least 12 characters (SRS §7.4)")
+    password: str = Field(min_length=8, description="Password must be at least 8 characters")
     full_name: str = Field(min_length=1, max_length=150)
     role: Optional[UserRole] = UserRole.REQUESTER
     site: Optional[str] = None

@@ -95,6 +95,72 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  Future<bool> register({
+    required String email,
+    required String password,
+    required String fullName,
+    required String role,
+    String? site,
+  }) async {
+    state = state.copyWith(status: AuthStatus.loading, errorMessage: null);
+    try {
+      final response = await _apiClient.post(
+        '/api/v1/auth/signup',
+        data: {
+          'email': email.trim(),
+          'password': password,
+          'full_name': fullName.trim(),
+          'role': role,
+          if (site != null && site.isNotEmpty) 'site': site.trim(),
+        },
+      );
+
+      if (response != null && response is Map<String, dynamic>) {
+        final tokens = response['tokens'] as Map<String, dynamic>?;
+        final accessToken = (tokens?['access_token'] ?? response['access_token']) as String?;
+        final refreshToken = (tokens?['refresh_token'] ?? response['refresh_token']) as String?;
+        final userData = response['user'] as Map<String, dynamic>?;
+
+        if (accessToken != null) {
+          await _apiClient.storage.write(key: AuthInterceptor.accessTokenKey, value: accessToken);
+        }
+        if (refreshToken != null) {
+          await _apiClient.storage.write(key: AuthInterceptor.refreshTokenKey, value: refreshToken);
+        }
+
+        UserModel? user;
+        if (userData != null) {
+          user = UserModel.fromJson(userData);
+        } else {
+          final meResponse = await _apiClient.get('/api/v1/auth/me');
+          if (meResponse is Map<String, dynamic>) {
+            user = UserModel.fromJson(meResponse);
+          }
+        }
+
+        state = state.copyWith(
+          status: AuthStatus.authenticated,
+          user: user,
+          errorMessage: null,
+        );
+        return true;
+      }
+      throw const ApiException(message: 'Invalid response from server');
+    } on ApiException catch (e) {
+      state = state.copyWith(
+        status: AuthStatus.error,
+        errorMessage: e.message,
+      );
+      return false;
+    } catch (e) {
+      state = state.copyWith(
+        status: AuthStatus.error,
+        errorMessage: e.toString(),
+      );
+      return false;
+    }
+  }
+
   Future<bool> loginWithGoogle(String idToken) async {
     state = state.copyWith(status: AuthStatus.loading, errorMessage: null);
     try {
